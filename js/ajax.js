@@ -7,11 +7,16 @@ $(function(){
 	$('#image').click(function(){
 		$('.col-md-10').load('./static/images.tpl');
 		$.getJSON('images.php',function(data){
+			var thed=$('.table thead');
+			var tbdy=$('.table tbody');
 			$.each(data,function  (key,value) {
+				var tr=$('<tr>');
 				$.each(value,function(key,value){
-					// console.log(key+':',value);
-					$('.table thead tr').append('<th>'+key+'</th>')
+					console.log(key,value);
+					var  td=$('<td>').html(value);
+					tr.append(td);
 				});
+				tbdy.append(tr);	
 			});
 		});
 	});
