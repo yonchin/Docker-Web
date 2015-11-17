@@ -1,4 +1,5 @@
 $(function(){
+	$('#dashdb').click();
 	$('#dashbd').click(function(){
 		$('.col-md-10').load('./static/dashboard.tpl');
 	});
@@ -8,7 +9,8 @@ $(function(){
 		$.getJSON('images.php',function(data){
 			$.each(data,function  (key,value) {
 				$.each(value,function(key,value){
-					console.log(key+':',value);
+					// console.log(key+':',value);
+					$('.table thead tr').append('<th>'+key+'</th>')
 				});
 			});
 		});
