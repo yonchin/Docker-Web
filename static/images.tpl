@@ -3,6 +3,7 @@
 		<thead>
 			<tr>
 				<th>Id</th>
+				<th>ParentId</th>
 				<th>RepoTags</th>
 				<th>Created</th>
 				<th>VirtualSize</th>

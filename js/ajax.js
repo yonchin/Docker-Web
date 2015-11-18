@@ -1,15 +1,16 @@
 $(function(){
-	$('#dashdb').click();
+	//加载dashboard页面
 	$('#dashbd').click(function(){
 		$('.col-md-10').load('./static/dashboard.tpl');
 	});
 
+	//加载images页面
 	$('#image').click(function(){
 		$('.col-md-10').load('./static/images.tpl');
 		$.getJSON('images.php',function(data){
-			var thed=$('.table thead');
 			var tbdy=$('.table tbody');
 			$.each(data,function  (key,value) {
+				// 将Json数据添加为表格的一行
 				var tr=$('<tr>');
 				$.each(value,function(key,value){
 					console.log(key,value);
@@ -21,26 +22,13 @@ $(function(){
 		});
 	});
 
+	//加载containers页面
 	$('#container').click(function(){
 		$('.col-md-10').load('./static/containers.tpl');
 	});
 
+	//加载info页面
 	$('#info').click(function(){
 		$('.col-md-10').load('./static/info.tpl');
 	});
-	// $.getJSON('.php',function(data){
-	// 	type=$.type(data);
-	// 	if(type == 'array'){
-	// 		$.each(data,function(key,value){
-	// 			console.log(key,value);
-	// 			$.each(value,function(index,value){
-	// 				console.log(index+':',value);
-	// 			})
-	// 		});
-	// 	}else if(type == 'object'){
-	// 		$.each(data,function(key,value){
-	// 			console.log(key,value);
-	// 		});
-	// 	}
-	// });
 });
