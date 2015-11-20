@@ -10,11 +10,19 @@ $(function(){
 		$('.col-md-10').load('./static/images.tpl',function(respsonse,status,xhr){
 			if(status == 'success'){
 				getJsonData('images.php',{all:0});
-				// alert($(nums).length);	
-				// alert($('tbody').find('tr').size());
+				// $('#dsplyAll').click(function(){
 				$('#dsplyAll').click(function(){
-					getJsonData('images.php',{all:1});
-				});	
+					if(clkCount%2 == 0){
+						$('tbody').find('tr').hide();
+						$(this).removeClass('btn-info').addClass('btn-primary').html('<strong> Default </strong>');
+						getJsonData('images.php',{all:1});
+					}else if(clkCount%2 == 1){
+						$('tbody').find('tr').hide();
+						$(this).removeClass('btn-primary').addClass('btn-info').html('<strong>Display All</strong>');
+						getJsonData('images.php',{all:0});
+					}
+					clkCount++;
+				});
 			}
 		})
 	});
@@ -31,7 +39,6 @@ $(function(){
 
 	//获取json数据并将其放入表格
 	function getJsonData(url,data){
-		var rowNums=0;
 		$.getJSON(url,data,function(json){
 			$('h4').find('span').text($(json).length);
 			// 将Json数据添加为表格的一行

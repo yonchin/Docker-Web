@@ -2,6 +2,9 @@
 	
 	date_default_timezone_set('UTC');
 
+	if(! isset($_GET['all'])){
+		echo '';
+	}
 
 	$images=file_get_contents('http://192.168.1.101:2375/images/json?all='.$_GET['all']);
 	// echo $images;
@@ -23,7 +26,6 @@
 			// $arr[]=array_combine($keys, explode(' ',$line));
 		}
 	}
-	// print_r($arr);
 
 	echo json_encode($arr);
 
