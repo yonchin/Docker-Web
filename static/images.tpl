@@ -1,7 +1,7 @@
 
 <div class="panel panel-default">
 	<div class="panel-heading clearfix">
-		<h4 class="panel-title pull-left" style="padding-top: 7.5px;">Images</h4>
+		<h4 class="panel-title pull-left" style="padding-top: 7.5px;">Images <span class='badge'>0</span></h4>
 		<div class="btn-group pull-right">
 			<a id='dsplyAll' href="#" class="btn btn-info btn-sm"><strong>Display All</strong></a>
 			<a href="#" class="btn btn-default btn-sm"><strong>Delete</strong></a>

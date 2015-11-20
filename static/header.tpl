@@ -27,8 +27,8 @@
 		<div id='left' class="col-xs-4 col-sm-3 col-md-2 sidebar">
 			<ul class='nav  nav-stacked'>
 				<li><a id='dashbd' href="#">Dashboard</a></li>
-				<li><a id='image' href="#">Images  <span class='badge pull-right'>0</span></a></li>
-				<li><a id='container' href="#">Containers  <span class='badge pull-right'>0</span></a></li>
+				<li><a id='image' href="#">Images</a></li>
+				<li><a id='container' href="#">Containers</a></li>
 				<li><a id='info' href="#">info</a></li>
 			</ul>
 		</div>
