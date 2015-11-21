@@ -2,12 +2,9 @@
 	
 	date_default_timezone_set('UTC');
 
-	if(! isset($_GET['all'])){
-		echo '';
-	}
+	 isset($_GET['all']) ? $imgAll=$_GET['all'] : $imgAll=0;
 
-	$images=file_get_contents('http://192.168.1.101:2375/images/json?all='.$_GET['all']);
-	// echo $images;
+	$images=file_get_contents('http://192.168.1.102:2375/images/json?all='.$imgAll);
 
 	//将json数据转换为多维数组
 	$images=json_decode($images,true);

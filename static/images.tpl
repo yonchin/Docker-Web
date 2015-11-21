@@ -5,7 +5,7 @@
 		<div class="btn-group pull-right">
 			<a id='dsplyAll' href="#" class="btn btn-info btn-sm"><strong>Display All</strong></a>
 
-			<a href="#" class="btn btn-default btn-sm"><strong>Delete</strong></a>
+			<a id='delImg' href="#" class="btn btn-default btn-sm"><strong>Delete</strong></a>
 			<a href="#" class="btn btn-success btn-sm"><strong>Add</strong></a>
 		</div>
 	</div>
