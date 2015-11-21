@@ -15,7 +15,6 @@ foreach ($imagesArr as $image) {
 	curl_exec($ch);
 }
 
-
 curl_close($ch);
 
 

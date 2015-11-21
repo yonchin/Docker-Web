@@ -43,17 +43,7 @@ $(function(){
 				$('#delImg').click(function(){
 					// alert($('tbody :checkbox').is(':checked'));		
 					if($('tbody :checkbox').is(':checked')){
-						//初始化变量
-						var imgNameId='';
-						$('tbody :checked').each(function(index, val) {
-							//取得镜像的名称，如果没有名词的就取得id
-							if($(this).parent().parent().find('td').eq(3).text() == '<none>'){
-								imgNameId += $(this).parent().next().text() + ' ';
-							}else{
-								imgNameId += $(this).parent().parent().find('td').eq(3).text()+
-								':'+ $(this).parent().parent().find('td').eq(4).text()+' ';
-							}
-						});
+						var imgNameId=getImgName();	
 						//将选定的镜像发送到服务端删除
 						$.get('img_del.php', {nameId:imgNameId},function(data){
 							alert(data);
@@ -98,4 +88,22 @@ $(function(){
 			});
 		});
 	}
+
+	//取得镜像的名称
+	function getImgName(){
+		//初始化变量
+		var imgNameId='';
+		$('tbody :checked').each(function(index, val) {
+			//取得镜像的名称，如果没有名词的就取得id
+			if($(this).parent().parent().find('td').eq(3).text() == '<none>'){
+				imgNameId += $(this).parent().next().text() + ' ';
+			}else{
+				imgNameId += $(this).parent().parent().find('td').eq(3).text()+
+				':'+ $(this).parent().parent().find('td').eq(4).text()+' ';
+			}
+		});
+		return imgNameId;
+	}
+
+	//
 });
