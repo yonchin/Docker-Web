@@ -4,10 +4,10 @@
 $images=trim($_GET['nameId']);
 $imagesArr=explode(' ',$images);
 
-
-	$ch = curl_init();
+//初始化curl
+$ch = curl_init();
 foreach ($imagesArr as $image) {
-	$url='http://192.168.1.102:2375/images/'.$image;
+	$url="http://192.168.1.102:2375/images/$image?force=1";
 	// $url='http://192.168.1.102:2375/images/17583c7dd0da';
 	curl_setopt($ch, CURLOPT_URL, $url);
 	curl_setopt($ch, CURLOPT_HEADER, false);

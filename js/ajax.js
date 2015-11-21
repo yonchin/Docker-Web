@@ -56,8 +56,7 @@ $(function(){
 						});
 						//将选定的镜像发送到服务端删除
 						$.get('img_del.php', {nameId:imgNameId},function(data){
-							alert(data+$('tbody').find('tr').length);
-							// $('h4').find('span').text($('tbody').find('tr').length);
+							alert(data);
 							$('tbody').find('tr').hide();
 							getJsonData('images.php',{all:0});
 							$('tbody :checked').parent().parent().remove();
