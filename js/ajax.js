@@ -55,6 +55,8 @@ $(function(){
 						alert('请选择要删除的镜像！');
 					}
 				});
+
+				//从已有的镜像里选择要打Tag的镜像
 			}
 		});
 	});
@@ -79,11 +81,21 @@ $(function(){
 				var tr=$('<tr>');
 				var chkbx=$('<td><input type="checkbox"/></td>');
 				tr.append(chkbx);	
+				//flag标记用来区分第一个td
+				var flag=1;
 				$.each(value,function(key,value){
 					console.log(key,value);
 					var  td=$('<td>').html(value);
-					tr.append(td);
+					//第一个td里面的内容加上超链接标签<a>
+					if(flag == 1){
+						td=$('<td>').html('<a href="#">'+value+'</a>');
+						tr.append(td);
+						flag++;
+					}else{
+						tr.append(td);
+					}
 				});
+				// tr.find('td').eq(1).html('<a>'+tr.find('td').eq(1).text()+'</a>');
 				tbdy.append(tr);	
 			});
 		});
