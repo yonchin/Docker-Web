@@ -88,7 +88,7 @@ $(function(){
 					var  td=$('<td>').html(value);
 					//第一个td里面的内容加上超链接标签<a>
 					if(flag == 1){
-						td=$('<td>').html('<a href="#">'+value+'</a>');
+						td=$('<td>').html('<a  href="#" data-toggle="modal" data-target="#imgModal">'+value+'</a>');
 						tr.append(td);
 						flag++;
 					}else{
