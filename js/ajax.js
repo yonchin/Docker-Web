@@ -44,9 +44,9 @@ $(function(){
 					// alert($('tbody :checkbox').is(':checked'));		
 					if($('tbody :checkbox').is(':checked')){
 						var imgNameId=getImgName();	
-						//将选定的镜像发送到服务端删除
+						// alert(imgNameId);
+						// 将选定的镜像发送到服务端删除
 						$.get('img_del.php', {nameId:imgNameId},function(data){
-							alert(data);
 							$('tbody').find('tr').hide();
 							getJsonData('images.php',{all:0});
 							$('tbody :checked').parent().parent().remove();
@@ -56,7 +56,21 @@ $(function(){
 					}
 				});
 
-				//从已有的镜像里选择要打Tag的镜像
+				//镜像获取镜像的id并将其填充到input中,此处必须用on事件委托的形式，否则无法绑定事件
+				$('tbody').on('click','a',function() {
+					if($(this).parent().parent().find('td').eq(3).text() == '<none>'){
+						imgNameId = $(this).parent().next().find('a').text();
+					}else{
+						imgNameId = $(this).parent().parent().find('td').eq(3).text()+
+						':'+ $(this).parent().parent().find('td').eq(4).text();
+					}
+					// alert(imgNameId);
+					$('#srcRepoIpt').val(imgNameId);
+				});
+
+				//对获取的镜像进行tag
+				$('#imgModal').on('click','#tagSubmit',function(){
+				});
 			}
 		});
 	});
@@ -108,7 +122,7 @@ $(function(){
 		$('tbody :checked').each(function(index, val) {
 			//取得镜像的名称，如果没有名词的就取得id
 			if($(this).parent().parent().find('td').eq(3).text() == '<none>'){
-				imgNameId += $(this).parent().next().text() + ' ';
+				imgNameId += $(this).parent().next().find('a').text() + ' ';
 			}else{
 				imgNameId += $(this).parent().parent().find('td').eq(3).text()+
 				':'+ $(this).parent().parent().find('td').eq(4).text()+' ';
@@ -116,6 +130,8 @@ $(function(){
 		});
 		return imgNameId;
 	}
+
+
 
 	//
 });

@@ -46,33 +46,41 @@
 				<div class="tab-content">
 					<!-- tag标签 -->
 					<div class='tab-pane active' id='tag'>
-						<form class="form" id=''>
+						<form class="form" id='tagForm'>
 							<div class="form-group">
-								<label>Repository</label>
-								<input class="form-control" id='' type='text' name='repo' placeholder='The repository to tag in' disabled/>
+								<label>Source Repository</label>
+								<input class="form-control" id='srcRepoIpt' type='text' name='repo' placeholder='The repository to tag in' disabled/>
 							</div>
 							<div class="form-group">
-								<label>Tag</label>
-								<input class="form-control" id='' type='text' name='tag' placeholder='The new tag name'/>
+								<label>New Repository</label>
+								<input class="form-control" id='newRepoIpt' type='text' name='repo' placeholder='The new repository name'/>
 							</div>
+							<div class="form-group">
+								<label>New Tag</label>
+								<input class="form-control" id='tagIpt' type='text' name='tag' placeholder='The new tag name'/>
+							</div>
+							<button class='btn btn-default' data-dismiss='modal'>Cancel</button>
+							<button class='btn btn-success pull-right' id='tagSubmit'>Submit</button>	
 						</form>
 					</div>
 					<!-- registry标签 -->
 					<div class='tab-pane' id="registry">
 						registry
 					</div>
+					<!-- history标签 -->
 					<div class='tab-pane' id="history">
 						history	
 					</div>
+					<!-- inspect标签 -->
 					<div class='tab-pane' id="inspect">
 						inspect
 					</div>
 				</div>
 			</div>
-			<div class="modal-footer">
-				<button class='btn btn-default' data-dismiss='modal'>Cancel</button>	
-				<button class='btn btn-success'>Submit</button>	
-			</div>	
+			<!-- <div class="modal-footer"> -->
+				<!-- <button class='btn btn-default' data-dismiss='modal'>Cancel</button>	 -->
+				<!-- <button class='btn btn-success'>Submit</button>	 -->
+			<!-- </div>	 -->
 		</div>
 	</div>
 </div>

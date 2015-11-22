@@ -8,12 +8,17 @@ $imagesArr=explode(' ',$images);
 $ch = curl_init();
 foreach ($imagesArr as $image) {
 	$url="http://192.168.1.103:2375/images/$image?force=1";
-	// $url='http://192.168.1.102:2375/images/17583c7dd0da';
+	// $url='http://192.168.1.103:2375/images/d1592a710ac3';
 	curl_setopt($ch, CURLOPT_URL, $url);
 	curl_setopt($ch, CURLOPT_HEADER, false);
 	curl_setopt($ch,CURLOPT_CUSTOMREQUEST,'DELETE');
 	curl_exec($ch);
 }
+	// if(curl_getinfo($ch,CURLINFO_HTTP_CODE) == '200'){
+	// 	echo 'ok';
+	// }else{
+	// 	echo 'no';
+	// }
 
 curl_close($ch);
 
