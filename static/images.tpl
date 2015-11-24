@@ -49,8 +49,8 @@
 						<form class="form" id='tagForm'>
 							<div class="form-group">
 								<label>Source Tag</label>
-								<input class="form-control" id='srcTagIpt' type='text' disabled/>
-								<input id='srcImgId' type="hidden" name='srcTag'>
+								<input class="form-control" id='srcTagIpt' type='text' placeholder='Source Tag' disabled/>
+								<input id='srcImgId' type="hidden" name='srcImgId'>
 							</div>
 							<div class="form-group">
 								<label>New Tag</label>

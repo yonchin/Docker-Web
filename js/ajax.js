@@ -48,9 +48,6 @@ $(function(){
 						// 将选定的镜像发送到服务端删除
 						$.get('img_del.php', {nameId:imgNameId},function(data){
 							switch(data){
-								case '200' :
-									alert('Deleted Success!');
-									break;
 								case '404' :
 									alert('No such image');
 									break;
@@ -81,17 +78,32 @@ $(function(){
 
 				//对获取的镜像进行tag
 				$('#imgModal').on('click','#tagSubmit',function(){
-					// alert($('#tagForm').fieldSerialize());
-					// alert($('#tagForm').serialize());
-					$(':input :disabled').removeProp('disabled');
-					$('#tagForm').ajaxSubmit({
-						url:'img_tag.php',
-						type:'post',
-						data:$('#tagForm').fieldSerialize(),
-						success:function(data){
-							alert(data);
-						}
+					if($.trim($('#newTagIpt').val()).length <= 0){
+						alert('不能为空!');
+						return false;
+					}
+					$.post('img_tag.php',$('#tagForm').serialize(),function(data){
+						switch(data){
+							case '201' :
+								alert('Success !');
+								break;
+							case '400' :
+								alert('Bad parameter !');
+								break;
+							case '404' :
+								alert('No such image');
+								break;
+							case '409' :
+								alert('Conflict');
+								break;
+							case '500' :
+								alert('Server error');
+								break;
+						}	
+						$('#imgModal').modal('hide');	
+						getJsonData('images.php',{all:0});
 					});
+					return false;
 				});
 			}
 		});
@@ -131,7 +143,6 @@ $(function(){
 						tr.append(td);
 					}
 				});
-				// tr.find('td').eq(1).html('<a>'+tr.find('td').eq(1).text()+'</a>');
 				tbdy.append(tr);	
 			});
 		});
