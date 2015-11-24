@@ -47,6 +47,20 @@ $(function(){
 						// alert(imgNameId);
 						// 将选定的镜像发送到服务端删除
 						$.get('img_del.php', {nameId:imgNameId},function(data){
+							switch(data){
+								case '200' :
+									alert('Deleted Success!');
+									break;
+								case '404' :
+									alert('No such image');
+									break;
+								case '409' :
+									alert('Conflict');
+									break;
+								case '500' :
+									alert('Server error');
+									break;
+							}
 							$('tbody').find('tr').hide();
 							getJsonData('images.php',{all:0});
 							$('tbody :checked').parent().parent().remove();
@@ -58,18 +72,26 @@ $(function(){
 
 				//镜像获取镜像的id并将其填充到input中,此处必须用on事件委托的形式，否则无法绑定事件
 				$('tbody').on('click','a',function() {
-					if($(this).parent().parent().find('td').eq(3).text() == '<none>'){
-						imgNameId = $(this).parent().next().find('a').text();
-					}else{
-						imgNameId = $(this).parent().parent().find('td').eq(3).text()+
-						':'+ $(this).parent().parent().find('td').eq(4).text();
-					}
-					// alert(imgNameId);
-					$('#srcRepoIpt').val(imgNameId);
+					imgTag= $(this).parent().parent().find('td').eq(3).text()+':'+ $(this).parent().parent().find('td').eq(4).text();
+					imgId=$(this).text();
+					// alert(imgId);
+					$('#srcTagIpt').val(imgTag);
+					$('#srcImgId').val(imgId);
 				});
 
 				//对获取的镜像进行tag
 				$('#imgModal').on('click','#tagSubmit',function(){
+					// alert($('#tagForm').fieldSerialize());
+					// alert($('#tagForm').serialize());
+					$(':input :disabled').removeProp('disabled');
+					$('#tagForm').ajaxSubmit({
+						url:'img_tag.php',
+						type:'post',
+						data:$('#tagForm').fieldSerialize(),
+						success:function(data){
+							alert(data);
+						}
+					});
 				});
 			}
 		});

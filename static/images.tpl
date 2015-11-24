@@ -48,16 +48,13 @@
 					<div class='tab-pane active' id='tag'>
 						<form class="form" id='tagForm'>
 							<div class="form-group">
-								<label>Source Repository</label>
-								<input class="form-control" id='srcRepoIpt' type='text' name='repo' placeholder='The repository to tag in' disabled/>
-							</div>
-							<div class="form-group">
-								<label>New Repository</label>
-								<input class="form-control" id='newRepoIpt' type='text' name='repo' placeholder='The new repository name'/>
+								<label>Source Tag</label>
+								<input class="form-control" id='srcTagIpt' type='text' disabled/>
+								<input id='srcImgId' type="hidden" name='srcTag'>
 							</div>
 							<div class="form-group">
 								<label>New Tag</label>
-								<input class="form-control" id='tagIpt' type='text' name='tag' placeholder='The new tag name'/>
+								<input class="form-control" id='newTagIpt' type='text' name='newTag' placeholder='[REGISTRYHOST/][USERNAME/]NAME[:TAG]'/>
 							</div>
 							<button class='btn btn-default' data-dismiss='modal'>Cancel</button>
 							<button class='btn btn-success pull-right' id='tagSubmit'>Submit</button>	
