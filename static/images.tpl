@@ -67,7 +67,8 @@
 					<!-- history标签 -->
 					<div class='tab-pane' id="history">
 						<p></p>
-						<div class="panel panel-warning">
+						<div class="panel panel-danger">
+						<!-- <div class="panel panel-warning"> -->
 							<div class="panel-heading">
 								<h4 class="panel-title"></h4>
 							</div>
@@ -85,7 +86,16 @@
 					</div>
 					<!-- inspect标签 -->
 					<div class='tab-pane' id="inspect">
-						inspect
+						<p></p>
+						<div class="panel panel-danger">
+						<!-- <div class="panel panel-warning"> -->
+							<div class="panel-heading">
+								<h4 class="panel-title"></h4>
+							</div>
+							<div class="panel-body">
+								<pre class='pre-scrollable'></pre>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

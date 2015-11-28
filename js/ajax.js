@@ -128,6 +128,16 @@ $(function(){
 						});
 					});
 				});
+
+				//获取镜像的inspect
+				$('#imgTbody').on('click','a',function(){
+					imgTag= $(this).parent().parent().find('td').eq(3).text()+':'+ $(this).parent().parent().find('td').eq(4).text();
+					imgId=$(this).text();
+					$('#inspect').find('h4').text('For [ '+imgTag+' ]');
+					$.getJSON('img_inspect.php',{imgId:imgId},function(json){
+						$('#inspect').find('pre').text(JSON.stringify(json,null,"\t"));
+					});
+				});	
 			}
 		});
 	});
@@ -187,5 +197,18 @@ $(function(){
 		return imgNameId;
 	}
 
+
+	function test(json){
+		var ul=$('<ul>');
+		$.each(json,function(key,value){
+			if(typeof value === 'object'){
+				test(value);
+			}else{
+				var li=$('<li>');
+				li.html(value);
+			}
+			ul.append(li);
+		});
+	}
 
 });
