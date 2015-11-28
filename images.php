@@ -8,7 +8,7 @@
 
 	//将json数据转换为多维数组
 	$images=json_decode($images,true);
-	$keys=array_keys($images[0]);
+	// $keys=array_keys($images[0]);
 	// print_r($keys);
 	foreach ($images as $k => $val) {
 		foreach ($val['RepoTags'] as $key => $value) {

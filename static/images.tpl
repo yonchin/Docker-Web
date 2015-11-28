@@ -11,7 +11,7 @@
 		</div>
 	</div>
 		
-	<table class="table table-hover table-responsive">
+	<table class="table table-hover table-responsive" id='imgTable'>
 		<thead>
 			<tr>
 				<th><input id='full' type='checkbox' /></th>
@@ -23,7 +23,7 @@
 				<th>VirtualSize</th>
 			</tr>
 		</thead>
-		<tbody></tbody>
+		<tbody id='imgTbody'></tbody>
 	</table>
 </div>
 
@@ -38,7 +38,7 @@
 			<div class="modal-body">
 				<ul class='nav nav-tabs nav-justified'>
 					<li class='active'><a href='#tag' data-toggle='tab'>Tag</a></li>
-					<li><a href='#registry' data-toggle='tab'>Registry</a></li>
+					<!-- <li><a href='#registry' data-toggle='tab'>Registry</a></li> -->
 					<li><a href='#history' data-toggle='tab'>History</a></li>
 					<li><a href='#inspect' data-toggle='tab'>Inspect</a></li>
 				</ul>
@@ -61,12 +61,21 @@
 						</form>
 					</div>
 					<!-- registry标签 -->
-					<div class='tab-pane' id="registry">
+					<!-- <div class='tab-pane' id="registry">
 						registry
-					</div>
+					</div> -->
 					<!-- history标签 -->
 					<div class='tab-pane' id="history">
-						history	
+						<table class='table table-condensed table-responsive' id='hstryTable'>
+							<thead>
+								<th>Image</th>
+								<th>Created</th>
+								<th>Created By</th>
+								<th>Size</th>
+								<th>Comment</th>
+							</thead>
+							<tbody id='hstryTbody'></tbody>	
+						</table>
 					</div>
 					<!-- inspect标签 -->
 					<div class='tab-pane' id="inspect">

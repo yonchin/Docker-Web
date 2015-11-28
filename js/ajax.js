@@ -16,12 +16,12 @@ $(function(){
 				var clkCount=0;
 				$('#dsplyAll').click(function(){
 					if(clkCount%2 == 0){
-						$('tbody').find('tr').hide();
+						$('#imgTbody').find('tr').hide();
 						$('#full').prop('checked', false);
 						$(this).removeClass('btn-info').addClass('btn-primary').html('<strong> Default </strong>');
 						getJsonData('images.php',{all:1});
 					}else if(clkCount%2 == 1){
-						$('tbody').find('tr').hide();
+						$('#imgTbody').find('tr').hide();
 						$('#full').prop('checked', false);
 						$(this).removeClass('btn-primary').addClass('btn-info').html('<strong>Display All</strong>');
 						getJsonData('images.php',{all:0});
@@ -33,17 +33,17 @@ $(function(){
 				$('#full').click(function(){
 					// if($('#full').prop('checked')){
 					if($(this).is(':checked')){
-						$('tbody :checkbox').prop('checked',true);
+						$('#imgTbody :checkbox').prop('checked',true);
 					}else{
-						$('tbody :checkbox').prop('checked',false);
+						$('#imgTbody :checkbox').prop('checked',false);
 					}
 				});
 
 				// 删除选定的镜像
 				$('#delImg').click(function(){
-					// alert($('tbody :checkbox').is(':checked'));		
-					if($('tbody :checkbox').is(':checked')){
-						var imgNameId=getImgName();	
+					// alert($('#imgTbody :checkbox').is(':checked'));		
+					if($('#imgTbody :checkbox').is(':checked')){
+						var imgNameId=getImgsName();	
 						// alert(imgNameId);
 						// 将选定的镜像发送到服务端删除
 						$.get('img_del.php', {nameId:imgNameId},function(data){
@@ -58,9 +58,9 @@ $(function(){
 									alert('Server error');
 									break;
 							}
-							$('tbody').find('tr').hide();
+							$('#imgTbody').find('tr').hide();
 							getJsonData('images.php',{all:0});
-							$('tbody :checked').parent().parent().remove();
+							$('#imgTbody :checked').parent().parent().remove();
 						});
 					}else{
 						alert('请选择要删除的镜像！');
@@ -68,7 +68,7 @@ $(function(){
 				});
 
 				//镜像获取镜像的id并将其填充到input中,此处必须用on事件委托的形式，否则无法绑定事件
-				$('tbody').on('click','a',function() {
+				$('#imgTbody').on('click','a',function() {
 					imgTag= $(this).parent().parent().find('td').eq(3).text()+':'+ $(this).parent().parent().find('td').eq(4).text();
 					imgId=$(this).text();
 					// alert(imgId);
@@ -78,6 +78,8 @@ $(function(){
 
 				//对获取的镜像进行tag
 				$('#imgModal').on('click','#tagSubmit',function(){
+					$('#srcTagIpt').val(imgTag);
+					$('#srcImgId').val(imgId);
 					if($.trim($('#newTagIpt').val()).length <= 0){
 						alert('不能为空!');
 						return false;
@@ -101,9 +103,28 @@ $(function(){
 								break;
 						}	
 						$('#imgModal').modal('hide');	
+						$('#imgTbody').find('tr').hide();
+						$('#newTagIpt').val(null);
 						getJsonData('images.php',{all:0});
 					});
 					return false;
+				});
+
+				//获取镜像的history
+				$('#imgTbody').on('click','a',function() {
+					imgId=$(this).text();
+					$.getJSON('img_history.php',{imgId:imgId},function(json){
+						var tbdy=$('#hstryTbody');
+						$.each(json,function(key,value){
+							var tr=$('<tr>');
+							$.each(value,function(k,val){
+								var td=$('<td>');
+								td.html(val);
+								tr.append(td);
+							});
+							tbdy.append(tr);
+						});
+					});
 				});
 			}
 		});
@@ -124,7 +145,7 @@ $(function(){
 		$.getJSON(url,data,function(json){
 			$('h4').find('span').text($(json).length);
 			// 将Json数据添加为表格的一行
-			var tbdy=$('.table tbody');
+			var tbdy=$('#imgTbody');
 			$.each(json,function  (key,value) {
 				var tr=$('<tr>');
 				var chkbx=$('<td><input type="checkbox"/></td>');
@@ -148,11 +169,11 @@ $(function(){
 		});
 	}
 
-	//取得镜像的名称
-	function getImgName(){
+	//点击复选框,获取得单个或多个镜像的名称
+	function getImgsName(){
 		//初始化变量
 		var imgNameId='';
-		$('tbody :checked').each(function(index, val) {
+		$('#imgTbody :checked').each(function(index, val) {
 			//取得镜像的名称，如果没有名词的就取得id
 			if($(this).parent().parent().find('td').eq(3).text() == '<none>'){
 				imgNameId += $(this).parent().next().find('a').text() + ' ';
@@ -165,6 +186,4 @@ $(function(){
 	}
 
 
-
-	//
 });
