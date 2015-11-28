@@ -66,16 +66,22 @@
 					</div> -->
 					<!-- history标签 -->
 					<div class='tab-pane' id="history">
-						<table class='table table-condensed table-responsive' id='hstryTable'>
-							<thead>
-								<th>Image</th>
-								<th>Created</th>
-								<th>Created By</th>
-								<th>Size</th>
-								<th>Comment</th>
-							</thead>
-							<tbody id='hstryTbody'></tbody>	
-						</table>
+						<p></p>
+						<div class="panel panel-warning">
+							<div class="panel-heading">
+								<h4 class="panel-title"></h4>
+							</div>
+							<table class='table table-condensed table-striped' id='hstrytable'>
+								<thead>
+									<th>Image</th>
+									<th>Created</th>
+									<th>Created By</th>
+									<th>Size</th>
+									<th>Comment</th>
+								</thead>
+								<tbody id='hstryTbody'></tbody>	
+							</table>
+						</div>
 					</div>
 					<!-- inspect标签 -->
 					<div class='tab-pane' id="inspect">

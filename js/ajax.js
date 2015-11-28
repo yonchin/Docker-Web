@@ -112,7 +112,9 @@ $(function(){
 
 				//获取镜像的history
 				$('#imgTbody').on('click','a',function() {
+					imgTag= $(this).parent().parent().find('td').eq(3).text()+':'+ $(this).parent().parent().find('td').eq(4).text();
 					imgId=$(this).text();
+					$('#history').find('h4').text('For [ '+imgTag+' ]');
 					$.getJSON('img_history.php',{imgId:imgId},function(json){
 						var tbdy=$('#hstryTbody');
 						$.each(json,function(key,value){
