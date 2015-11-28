@@ -112,6 +112,7 @@ $(function(){
 
 				//获取镜像的history
 				$('#imgTbody').on('click','a',function() {
+					$('#hstryTbody').find('tr').hide();						
 					imgTag= $(this).parent().parent().find('td').eq(3).text()+':'+ $(this).parent().parent().find('td').eq(4).text();
 					imgId=$(this).text();
 					$('#history').find('h4').text('For [ '+imgTag+' ]');
