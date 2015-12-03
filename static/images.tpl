@@ -7,7 +7,7 @@
 
 			<a id='delImg' href="#" class="btn btn-warning btn-sm"><strong>Delete</strong></a>
 			<!-- <a id='tag' href="#tagModal" class="btn btn-success btn-sm " data-toggle='modal'><strong>Tag</strong></a> -->
-			<a href="#" class="btn btn-default btn-sm"><strong>Add</strong></a>
+			<a href="#imgCrtModal" class="btn btn-default btn-sm" data-toggle='modal'><strong>Create</strong></a>
 		</div>
 	</div>
 		
@@ -46,7 +46,7 @@
 				<div class="tab-content">
 					<!-- tag标签 -->
 					<div class='tab-pane active' id='tag'>
-						<form class="form" id='tagForm'>
+						<form id='tagForm'>
 							<div class="form-group">
 								<label>Source Tag</label>
 								<input class="form-control" id='srcTagIpt' type='text' placeholder='Source Tag' disabled/>
@@ -107,3 +107,41 @@
 	</div>
 </div>
 
+<!-- 从Dockerfile创建镜像 -->
+<div class="modal" id='imgCrtModal' tabindex='-1'>
+	<div class="modal-dialog">
+	<!-- <div class="modal-dialog "> -->
+		<div class="modal-content">
+			<div class="modal-header">
+				<a href="#" class="close" data-dismiss='modal'>&times;</a>
+				<h5 class="modal-title"><strong>From Dockerfile Create Images</strong></h5>
+			</div>
+			<div class="modal-body">
+				<form id='createForm' enctype="multipart/form-data">
+					<div class="form-group">
+						<label for="">Build Directory Name:</label>
+						<input class='form-control'  name='dkFileDir'>
+					</div>
+					<div class="form-group">
+						<label for="">Dockerfile:</label>
+						<textarea class='form-control' rows='15' name='dkFileData'></textarea>
+					</div>
+					<div class="form-group">
+						<label for="">Tag:</label>
+						<input class='form-control' name='dkTag' placeholder='[REGISTRYHOST/][USERNAME/]NAME[:TAG]'>
+					</div>
+					<div class="checkbox">
+						<label for="dkAddFileChkbx">
+							<input id='dkAddFileChkbx' type='checkbox'>
+							Add File
+						</label>
+					</div>
+					<input class='form-control'  id='dkAddFile' type='file' name='dkAddFile[]'  multiple>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button class='btn btn-default' data-dismiss='modal'>Cancel</button>
+				<button id='imgCrtBtn' class='btn btn-success'>Create</button>
+			</div>
+		</div>
+	</div> </div>

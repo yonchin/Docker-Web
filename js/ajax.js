@@ -10,7 +10,7 @@ $(function(){
 		$('.col-md-10').load('./static/images.tpl',function(respsonse,status,xhr){
 			if(status == 'success'){
 				//页面首次加载后需要显示一次数据
-				getJsonData('images.php',{all:0});
+				getJsonData('img_list.php',{all:0});
 
 				//全部镜像与默认相互切换
 				var clkCount=0;
@@ -19,12 +19,12 @@ $(function(){
 						$('#imgTbody').find('tr').hide();
 						$('#full').prop('checked', false);
 						$(this).removeClass('btn-info').addClass('btn-primary').html('<strong> Default </strong>');
-						getJsonData('images.php',{all:1});
+						getJsonData('img_list.php',{all:1});
 					}else if(clkCount%2 == 1){
 						$('#imgTbody').find('tr').hide();
 						$('#full').prop('checked', false);
 						$(this).removeClass('btn-primary').addClass('btn-info').html('<strong>Display All</strong>');
-						getJsonData('images.php',{all:0});
+						getJsonData('img_list.php',{all:0});
 					}
 					clkCount++;
 				});
@@ -59,7 +59,7 @@ $(function(){
 									break;
 							}
 							$('#imgTbody').find('tr').hide();
-							getJsonData('images.php',{all:0});
+							getJsonData('img_list.php',{all:0});
 							$('#imgTbody :checked').parent().parent().remove();
 						});
 					}else{
@@ -105,7 +105,7 @@ $(function(){
 						$('#imgModal').modal('hide');	
 						$('#imgTbody').find('tr').hide();
 						$('#newTagIpt').val(null);
-						getJsonData('images.php',{all:0});
+						getJsonData('img_list.php',{all:0});
 					});
 					return false;
 				});
@@ -139,6 +139,47 @@ $(function(){
 						$('#inspect').find('pre').text(JSON.stringify(json,null,"\t"));
 					});
 				});	
+
+				// 默认情况下添加文件隐藏
+				$('#dkAddFile').hide();
+				// 当选中复选框时显示添加文件输入框,否则隐藏
+				$('#createForm').on('click','#dkAddFileChkbx',function(){
+					if($('#dkAddFileChkbx').is(':checked')){
+						$('#dkAddFile').prop('disabled',false);
+						$('#dkAddFile').show();
+					}else{
+						$('#dkAddFile').prop('disabled',true);
+						$('#dkAddFile').hide();
+					}
+				});
+
+				// $('#dkAddFile').change(function(){
+				// 	$('#createForm').ajaxSubmit({
+				// 		url:'img_create.php',
+				// 		type:'post',
+				// 		success:function(data){
+				// 			alert(data);
+				// 		}
+				// 	});
+				// });
+
+				//test
+				$('#imgCrtBtn').click(function() {
+					// alert($('#createForm').serialize());
+					// $.post('img_create.php',$('#createForm').serialize(),function(data){
+					// 	alert(data);
+					// });
+					$('#createForm').ajaxSubmit({
+						url:'img_create.php',
+						type:'POST',
+						data:$('#createForm').fieldSerialize(),
+						success:function(data){
+							alert(data);
+						}
+					});
+					$('#imgCrtModal').modal('hide');
+					return false;
+				});
 			}
 		});
 	});
