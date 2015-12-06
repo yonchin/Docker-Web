@@ -1,2 +1,2 @@
 FROM A
-RUN  echo 'aaaaaaaaaaaaaaBBBBBBBBBBBBB'
+RUN echo 'this is aaaaaaaaaaaaaaa'

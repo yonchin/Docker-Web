@@ -13,21 +13,22 @@ $(function(){
 				getJsonData('img_list.php',{all:0});
 
 				//全部镜像与默认相互切换
-				var clkCount=0;
-				$('#dsplyAll').click(function(){
-					if(clkCount%2 == 0){
-						$('#imgTbody').find('tr').hide();
-						$('#full').prop('checked', false);
-						$(this).removeClass('btn-info').addClass('btn-primary').html('<strong> Default </strong>');
-						getJsonData('img_list.php',{all:1});
-					}else if(clkCount%2 == 1){
-						$('#imgTbody').find('tr').hide();
-						$('#full').prop('checked', false);
-						$(this).removeClass('btn-primary').addClass('btn-info').html('<strong>Display All</strong>');
-						getJsonData('img_list.php',{all:0});
-					}
-					clkCount++;
-				});
+				dsplyAlltoDefault('img_list.php');
+				// var clkCount=0;
+				// $('#dsplyAll').click(function(){
+				// 	if(clkCount%2 == 0){
+				// 		$('#imgTbody').find('tr').hide();
+				// 		$('#full').prop('checked', false);
+				// 		$(this).removeClass('btn-info').addClass('btn-primary').html('<strong> Default </strong>');
+				// 		getJsonData('img_list.php',{all:1});
+				// 	}else if(clkCount%2 == 1){
+				// 		$('#imgTbody').find('tr').hide();
+				// 		$('#full').prop('checked', false);
+				// 		$(this).removeClass('btn-primary').addClass('btn-info').html('<strong>Display All</strong>');
+				// 		getJsonData('img_list.php',{all:0});
+				// 	}
+				// 	clkCount++;
+				// });
 
 				//实现进行全选与反选
 				$('#full').click(function(){
@@ -41,13 +42,18 @@ $(function(){
 
 				// 删除选定的镜像
 				$('#delImg').click(function(){
-					// alert($('#imgTbody :checkbox').is(':checked'));		
+					var btn=$(this).removeClass('btn-warning').addClass('btn-danger').button('loading');
 					if($('#imgTbody :checkbox').is(':checked')){
 						var imgNameId=getImgsName();	
 						// alert(imgNameId);
 						// 将选定的镜像发送到服务端删除
 						$.get('img_del.php', {nameId:imgNameId},function(data){
+							btn.button('reset').removeClass('btn-danger').addClass('btn-warning');
 							switch(data){
+								case '200':
+									$('#imgTbody').find('tr').hide();
+									getJsonData('img_list.php',{all:0});
+									break;
 								case '404' :
 									alert('No such image');
 									break;
@@ -58,9 +64,11 @@ $(function(){
 									alert('Server error');
 									break;
 							}
+							//隐藏前面的行
 							$('#imgTbody').find('tr').hide();
 							getJsonData('img_list.php',{all:0});
-							$('#imgTbody :checked').parent().parent().remove();
+
+							// $('#imgTbody :checked').parent().parent().remove();
 						});
 					}else{
 						alert('请选择要删除的镜像！');
@@ -86,9 +94,6 @@ $(function(){
 					}
 					$.post('img_tag.php',$('#tagForm').serialize(),function(data){
 						switch(data){
-							case '201' :
-								alert('Success !');
-								break;
 							case '400' :
 								alert('Bad parameter !');
 								break;
@@ -165,19 +170,25 @@ $(function(){
 
 				//test
 				$('#imgCrtBtn').click(function() {
-					// alert($('#createForm').serialize());
-					// $.post('img_create.php',$('#createForm').serialize(),function(data){
-					// 	alert(data);
-					// });
+					var btn=$(this).removeClass('btn-success').addClass('btn-info').button('loading');
 					$('#createForm').ajaxSubmit({
 						url:'img_create.php',
 						type:'POST',
 						data:$('#createForm').fieldSerialize(),
 						success:function(data){
-							alert(data);
+							switch(data){
+								case '200' :
+									btn.button('reset').removeClass('btn-info').addClass('btn-success');
+									$('#imgTbody').find('tr').hide();
+									getJsonData('img_list.php',{all:0});
+									$('#imgCrtModal').modal('hide');
+									break;
+								case '500' :
+									alert('Server error');
+									break;
+							}	
 						}
 					});
-					$('#imgCrtModal').modal('hide');
 					return false;
 				});
 			}
@@ -186,7 +197,12 @@ $(function(){
 
 	//加载containers页面
 	$('#container').click(function(){
-		$('.col-md-10').load('./static/containers.tpl');
+		$('.col-md-10').load('./static/containers.tpl',function(respsonse,status,xhr){
+			if(status == 'success'){
+				getJsonData('container_list.php',{all:0});
+				dsplyAlltoDefault('container_list.php');
+			}
+		});
 	});
 
 	//加载info页面
@@ -240,17 +256,24 @@ $(function(){
 	}
 
 
-	function test(json){
-		var ul=$('<ul>');
-		$.each(json,function(key,value){
-			if(typeof value === 'object'){
-				test(value);
-			}else{
-				var li=$('<li>');
-				li.html(value);
+	function dsplyAlltoDefault(url){
+		var clkCount=0;
+		$('#dsplyAll').click(function(){
+			if(clkCount%2 == 0){
+				$('#imgTbody').find('tr').hide();
+				$('#full').prop('checked', false);
+				$(this).removeClass('btn-info').addClass('btn-primary').html('<strong> Default </strong>');
+				getJsonData(url,{all:1});
+			}else if(clkCount%2 == 1){
+				$('#imgTbody').find('tr').hide();
+				$('#full').prop('checked', false);
+				$(this).removeClass('btn-primary').addClass('btn-info').html('<strong>Display All</strong>');
+				getJsonData(url,{all:0});
 			}
-			ul.append(li);
+			clkCount++;
 		});
 	}
+
+
 
 });

@@ -5,7 +5,7 @@
 		<div class="btn-group pull-right">
 			<a id='dsplyAll' href="#" class="btn btn-info btn-sm"><strong>Display All</strong></a>
 
-			<a id='delImg' href="#" class="btn btn-warning btn-sm"><strong>Delete</strong></a>
+			<a id='delImg' href="#" class="btn btn-warning btn-sm" data-loading-text='Deleting'><strong>Delete</strong></a>
 			<!-- <a id='tag' href="#tagModal" class="btn btn-success btn-sm " data-toggle='modal'><strong>Tag</strong></a> -->
 			<a href="#imgCrtModal" class="btn btn-default btn-sm" data-toggle='modal'><strong>Create</strong></a>
 		</div>
@@ -141,7 +141,7 @@
 			</div>
 			<div class="modal-footer">
 				<button class='btn btn-default' data-dismiss='modal'>Cancel</button>
-				<button id='imgCrtBtn' class='btn btn-success'>Create</button>
+				<button id='imgCrtBtn' class='btn btn-success' data-loading-text='Creating......'>Create</button>
 			</div>
 		</div>
 	</div> </div>

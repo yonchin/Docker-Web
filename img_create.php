@@ -2,12 +2,22 @@
 
 
 // print_r($_POST);
-// print_r($_FILES);
+ // print_r(array_keys($_FILES)[0]);
 
 $dkFileDir=trim($_POST['dkFileDir']);
 mkdir('docker/'.$dkFileDir);
 $uploadDir=realpath("docker/$dkFileDir");
 // echo $uploadDir;
+
+foreach ($_FILES['dkAddFile']['error'] as $key => $error) {
+    if($error == UPLOAD_ERR_OK){
+        $tmp_name = $_FILES['dkAddFile']['tmp_name'][$key];
+        $name = $_FILES['dkAddFile']['name'][$key];
+        $fileName=$_FILES['dkAddFile']['name'];
+        move_uploaded_file($tmp_name, "./$name");
+    }
+}
+
 
 $dkFileData=trim($_POST['dkFileData']);
 $dkTag=trim($_POST['dkTag']);
@@ -42,7 +52,7 @@ $opt=array(
 );
 
 curl_setopt_array($ch,$opt);
-echo curl_exec($ch);
+curl_exec($ch);
 //获取响应状态码
 echo curl_getinfo($ch,CURLINFO_HTTP_CODE);
 
@@ -53,12 +63,11 @@ curl_close($ch);
 unlink('Dockerfile.tar');
 unlink('Dockerfile.tar.gz');
 
-foreach ($_FILES['dkAddFile']['error'] as $key => $error) {
-    if($error == UPLOAD_ERR_OK){
-        $tmp_name = $_FILES['dkAddFile']['tmp_name'][$key];
-        $name = $_FILES['dkAddFile']['name'][$key];
-        move_uploaded_file($tmp_name, "$uploadDir/$name");
-    }
+foreach ($fileName as $key => $name) {
+    rename(realpath($name),"$uploadDir/$name");
+
 }
+
+// print_r($fileName);
 
 
