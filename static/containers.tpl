@@ -5,12 +5,12 @@
 		<div class="btn-group pull-right">
 			<a id='dsplyAll' href="#" class="btn btn-info btn-sm"><strong>Display All</strong></a>
 
-			<a id='delImg' href="#" class="btn btn-warning btn-sm" data-loading-text='Deleting'><strong>Delete</strong></a>
-			<a href="#imgCrtModal" class="btn btn-default btn-sm" data-toggle='modal'><strong>Create</strong></a>
+			<a id='delCtner' href="#" class="btn btn-warning btn-sm" data-loading-text='Deleting'><strong>Delete</strong></a>
+			<a href="#ctnerCrtModal" class="btn btn-default btn-sm" data-toggle='modal'><strong>Create</strong></a>
 		</div>
 	</div>
 		
-	<table class="table table-hover table-responsive" id='imgTable'>
+	<table class="table table-hover table-responsive">
 		<thead>
 			<tr>
 				<th><input id='full' type='checkbox' /></th>
@@ -23,12 +23,12 @@
 				<th>Posrts</th>
 			</tr>
 		</thead>
-		<tbody id='imgTbody'></tbody>
+		<tbody id='ctnerTbody'></tbody>
 	</table>
 </div>
 
 <!-- 链接模态框 -->
-<div class="modal" id='imgModal' tabindex='-1'>
+<div class="modal" id='ctnerModal' tabindex='-1'>
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -37,7 +37,7 @@
 			</div>	
 			<div class="modal-body">
 				<ul class='nav nav-tabs nav-justified'>
-					<li class='active'><a href='#tag' data-toggle='tab'>Tag</a></li>
+					<li class='active'><a id='process' href='#ps' data-toggle='tab'>Processes</a></li>
 					<!-- <li><a href='#registry' data-toggle='tab'>Registry</a></li> -->
 					<li><a href='#history' data-toggle='tab'>History</a></li>
 					<li><a href='#inspect' data-toggle='tab'>Inspect</a></li>
@@ -45,20 +45,19 @@
 
 				<div class="tab-content">
 					<!-- tag标签 -->
-					<div class='tab-pane active' id='tag'>
-						<form id='tagForm'>
-							<div class="form-group">
-								<label>Source Tag</label>
-								<input class="form-control" id='srcTagIpt' type='text' placeholder='Source Tag' disabled/>
-								<input id='srcImgId' type="hidden" name='srcImgId'>
+					<div class='tab-pane active' id='ps'>
+						<p></p>
+						<div class="panel panel-danger">
+						<!-- <div class="panel panel-warning"> -->
+							<div class="panel-heading">
+								<h4 class="panel-title"></h4>
 							</div>
-							<div class="form-group">
-								<label>New Tag</label>
-								<input class="form-control" id='newTagIpt' type='text' name='newTag' placeholder='[REGISTRYHOST/][USERNAME/]NAME[:TAG]'/>
-							</div>
-							<button class='btn btn-default' data-dismiss='modal'>Cancel</button>
-							<button class='btn btn-success pull-right' id='tagSubmit'>Submit</button>	
-						</form>
+							<p></p>
+							<table class='table table-condensed table-striped'>
+								<thead id='psThead'></thead>
+								<tbody id='psTbody'></tbody>	
+							</table>
+						</div>
 					</div>
 					<!-- registry标签 -->
 					<!-- <div class='tab-pane' id="registry">
@@ -108,7 +107,7 @@
 </div>
 
 <!-- 从Dockerfile创建镜像 -->
-<div class="modal" id='imgCrtModal' tabindex='-1'>
+<div class="modal" id='ctnerCrtModal' tabindex='-1'>
 	<div class="modal-dialog">
 	<!-- <div class="modal-dialog "> -->
 		<div class="modal-content">
@@ -141,7 +140,7 @@
 			</div>
 			<div class="modal-footer">
 				<button class='btn btn-default' data-dismiss='modal'>Cancel</button>
-				<button id='imgCrtBtn' class='btn btn-success' data-loading-text='Creating......'>Create</button>
+				<button id='ctnerCrtBtn' class='btn btn-success' data-loading-text='Creating......'>Create</button>
 			</div>
 		</div>
 	</div> </div>

@@ -10,35 +10,14 @@ $(function(){
 		$('.col-md-10').load('./static/images.tpl',function(respsonse,status,xhr){
 			if(status == 'success'){
 				//页面首次加载后需要显示一次数据
-				getJsonData('img_list.php',{all:0});
+				getJsonData('img_list.php',{all:0},'#imgTbody');
 
 				//全部镜像与默认相互切换
-				dsplyAlltoDefault('img_list.php');
-				// var clkCount=0;
-				// $('#dsplyAll').click(function(){
-				// 	if(clkCount%2 == 0){
-				// 		$('#imgTbody').find('tr').hide();
-				// 		$('#full').prop('checked', false);
-				// 		$(this).removeClass('btn-info').addClass('btn-primary').html('<strong> Default </strong>');
-				// 		getJsonData('img_list.php',{all:1});
-				// 	}else if(clkCount%2 == 1){
-				// 		$('#imgTbody').find('tr').hide();
-				// 		$('#full').prop('checked', false);
-				// 		$(this).removeClass('btn-primary').addClass('btn-info').html('<strong>Display All</strong>');
-				// 		getJsonData('img_list.php',{all:0});
-				// 	}
-				// 	clkCount++;
-				// });
-
+				dsplyAlltoDefault('img_list.php','#imgTbody');
+			
 				//实现进行全选与反选
-				$('#full').click(function(){
-					// if($('#full').prop('checked')){
-					if($(this).is(':checked')){
-						$('#imgTbody :checkbox').prop('checked',true);
-					}else{
-						$('#imgTbody :checkbox').prop('checked',false);
-					}
-				});
+				fullCheckedOrNot('#imgTbody');
+				
 
 				// 删除选定的镜像
 				$('#delImg').click(function(){
@@ -52,7 +31,7 @@ $(function(){
 							switch(data){
 								case '200':
 									$('#imgTbody').find('tr').hide();
-									getJsonData('img_list.php',{all:0});
+									getJsonData('img_list.php',{all:0},'#imgTbody');
 									break;
 								case '404' :
 									alert('No such image');
@@ -66,7 +45,11 @@ $(function(){
 							}
 							//隐藏前面的行
 							$('#imgTbody').find('tr').hide();
-							getJsonData('img_list.php',{all:0});
+							if($.trim($('#dsplyAll').find('strong').text()) == 'Display All'){
+								getJsonData('img_list.php',{all:0},'#imgTbody');
+							}else if($.trim($('#dsplyAll').find('strong').text()) == 'Default'){
+								getJsonData('img_list.php',{all:1},'#imgTbody');
+							}
 
 							// $('#imgTbody :checked').parent().parent().remove();
 						});
@@ -110,7 +93,7 @@ $(function(){
 						$('#imgModal').modal('hide');	
 						$('#imgTbody').find('tr').hide();
 						$('#newTagIpt').val(null);
-						getJsonData('img_list.php',{all:0});
+						getJsonData('img_list.php',{all:0},'#imgTbody');
 					});
 					return false;
 				});
@@ -157,18 +140,7 @@ $(function(){
 						$('#dkAddFile').hide();
 					}
 				});
-
-				// $('#dkAddFile').change(function(){
-				// 	$('#createForm').ajaxSubmit({
-				// 		url:'img_create.php',
-				// 		type:'post',
-				// 		success:function(data){
-				// 			alert(data);
-				// 		}
-				// 	});
-				// });
-
-				//test
+				//创建镜像
 				$('#imgCrtBtn').click(function() {
 					var btn=$(this).removeClass('btn-success').addClass('btn-info').button('loading');
 					$('#createForm').ajaxSubmit({
@@ -180,7 +152,7 @@ $(function(){
 								case '200' :
 									btn.button('reset').removeClass('btn-info').addClass('btn-success');
 									$('#imgTbody').find('tr').hide();
-									getJsonData('img_list.php',{all:0});
+									getJsonData('img_list.php',{all:0},'#imgTbody');
 									$('#imgCrtModal').modal('hide');
 									break;
 								case '500' :
@@ -199,8 +171,93 @@ $(function(){
 	$('#container').click(function(){
 		$('.col-md-10').load('./static/containers.tpl',function(respsonse,status,xhr){
 			if(status == 'success'){
-				getJsonData('container_list.php',{all:0});
-				dsplyAlltoDefault('container_list.php');
+				//加载默认容器列表
+				getJsonData('container_list.php',{all:0},'#ctnerTbody');
+				//实现容器默认列表与全部列表的相互转换
+				dsplyAlltoDefault('container_list.php','#ctnerTbody');
+				//实现进行全选与反选
+				fullCheckedOrNot('#ctnerTbody');
+
+
+				// 删除选定的容器
+				$('#delCtner').click(function(){
+					var btn=$(this).removeClass('btn-warning').addClass('btn-danger').button('loading');
+					if($('#ctnerTbody :checkbox').is(':checked')){
+						var ctnerId=function(){
+								var ctnerId='';
+								$('#ctnerTbody :checked').each(function(key,value){
+									ctnerId += $(this).parent().next().find('a').text()+' ';
+								});
+								return ctnerId;	
+							}();	
+						// alert(imgNameId);
+						// 将选定的镜像发送到服务端删除
+						$.get('container_del.php', {nameId:ctnerId},function(data){
+							btn.button('reset').removeClass('btn-danger').addClass('btn-warning');
+							switch(data){
+								case '204':
+									$('#ctnerTbody').find('tr').hide();
+									getJsonData('container_list.php',{all:0},'#ctnerTbody');
+									break;
+								case '400' :
+									alert('bad parameter');
+									break;
+								case '404' :
+									alert('No such container');
+									break;
+								case '500' :
+									alert('Server error');
+									break;
+							}
+							//隐藏前面的行
+							$('#ctnerTbody').find('tr').hide();
+							if($.trim($('#dsplyAll').find('strong').text()) == 'Display All'){
+								getJsonData('container_list.php',{all:0},'#ctnerTbody');
+							}else if($.trim($('#dsplyAll').find('strong').text()) == 'Default'){
+								getJsonData('container_list.php',{all:1},'#ctnerTbody');
+							}
+
+							// $('#imgTbody :checked').parent().parent().remove();
+						});
+					}else{
+						alert('请选择要删除的容器！');
+					}
+				});
+
+				$('#ctnerTbody').on('click','a',function(){
+					imgTag= $(this).parent().parent().find('td').eq(3).text();
+					ctnerId=$(this).text();
+					//获取容器的processes
+					$.getJSON('container_top.php',{ctnerId:ctnerId},function(json){
+						$('#ps').find('h4').text('For [ '+imgTag+' ]');
+						//print title
+						var thd=$('#psThead');
+						$.each(json.Titles,function(index, title) {
+							var th=$('<th>');
+							th.html(title);
+							th.appendTo(thd);
+						});	
+						//print process
+						var tbdy=$('#psTbody');
+						$.each(json.Processes,function(index,process){
+							var tr=$('<tr>');
+							$.each(process,function(index,item){
+								var td=$('<td>');
+								td.text(item);
+								tr.append(td);
+							});
+							tbdy.append(tr);
+						});
+					});
+					//获取容器的inspect
+					$('#ctnerModal').on('click','a[href="#inspect"]',function(){
+						$('#inspect').find('h4').text('For [ '+imgTag+' ]');
+						$.getJSON('container_inspect.php',{ctnerId:ctnerId},function(json){
+							$('#inspect').find('pre').text(JSON.stringify(json,null,"\t"));
+						});
+					});
+
+				});	
 			}
 		});
 	});
@@ -211,11 +268,15 @@ $(function(){
 	});
 
 	//获取json数据并将其放入表格
-	function getJsonData(url,data){
+	function getJsonData(url,data,tbodyId){
+		// var modalId=tbodyId.substr(1,-5)+"Modal";
+		var modalId=tbodyId.slice(0,-5)+"Modal";
+
 		$.getJSON(url,data,function(json){
 			$('h4').find('span').text($(json).length);
 			// 将Json数据添加为表格的一行
-			var tbdy=$('#imgTbody');
+			// var tbdy=$('#imgTbody');
+			var tbdy=$(tbodyId);
 			$.each(json,function  (key,value) {
 				var tr=$('<tr>');
 				var chkbx=$('<td><input type="checkbox"/></td>');
@@ -227,7 +288,7 @@ $(function(){
 					var  td=$('<td>').html(value);
 					//第一个td里面的内容加上超链接标签<a>
 					if(flag == 1){
-						td=$('<td>').html('<a  href="#" data-toggle="modal" data-target="#imgModal">'+value+'</a>');
+						td=$('<td>').html('<a  href="#" data-toggle="modal" data-target='+modalId+'>'+value+'</a>');
 						tr.append(td);
 						flag++;
 					}else{
@@ -256,21 +317,33 @@ $(function(){
 	}
 
 
-	function dsplyAlltoDefault(url){
+	function dsplyAlltoDefault(url,tbodyId){
 		var clkCount=0;
 		$('#dsplyAll').click(function(){
 			if(clkCount%2 == 0){
-				$('#imgTbody').find('tr').hide();
+				$(tbodyId).find('tr').hide();
 				$('#full').prop('checked', false);
 				$(this).removeClass('btn-info').addClass('btn-primary').html('<strong> Default </strong>');
-				getJsonData(url,{all:1});
+				getJsonData(url,{all:1},tbodyId);
 			}else if(clkCount%2 == 1){
-				$('#imgTbody').find('tr').hide();
+				$(tbodyId).find('tr').hide();
 				$('#full').prop('checked', false);
 				$(this).removeClass('btn-primary').addClass('btn-info').html('<strong>Display All</strong>');
-				getJsonData(url,{all:0});
+				getJsonData(url,{all:0},tbodyId);
 			}
 			clkCount++;
+		});
+	}
+
+
+	//实现进行全选与反选
+	function fullCheckedOrNot(tbodyId){
+		$('#full').click(function(){
+			if($(this).is(':checked')){
+				$(tbodyId +' :checkbox').prop('checked',true);
+			}else{
+				$(tbodyId +' :checkbox').prop('checked',false);
+			}
 		});
 	}
 
