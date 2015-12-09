@@ -1,6 +1,6 @@
 <?php 
 
-
+include 'config.php';
 // print_r($_POST);
  // print_r(array_keys($_FILES)[0]);
 
@@ -40,7 +40,7 @@ $fildata=fread($file,$size);
 $ch=curl_init();
 
 $opt=array(
-    CURLOPT_URL => 'http://192.168.1.103:2375/build?t='.$dkTag.'&nocache=1',
+    CURLOPT_URL => DOCKER_URL.'/build?t='.$dkTag.'&nocache=1',
     CURLOPT_HEADER => false,
     CURLOPT_CUSTOMREQUEST => 'POST',
     CURLOPT_HTTPHEADER => array('Content-Type:application/tar'),

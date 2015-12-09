@@ -225,6 +225,8 @@ $(function(){
 				});
 
 				$('#ctnerTbody').on('click','a',function(){
+					$('#psThead').find('th').hide();
+					$('#psTbody').find('tr').hide();
 					imgTag= $(this).parent().parent().find('td').eq(3).text();
 					ctnerId=$(this).text();
 					//获取容器的processes
@@ -251,9 +253,31 @@ $(function(){
 					});
 					//获取容器的inspect
 					$('#ctnerModal').on('click','a[href="#inspect"]',function(){
+						var btn=$(this).button('loading');
 						$('#inspect').find('h4').text('For [ '+imgTag+' ]');
 						$.getJSON('container_inspect.php',{ctnerId:ctnerId},function(json){
+							btn.button('reset');
 							$('#inspect').find('pre').text(JSON.stringify(json,null,"\t"));
+						});
+					});
+					//获取容器的changes
+					$('#ctnerModal').on('click','a[href="#changes"]',function(){
+						var btn=$(this).button('loading');
+						$('#changes').find('tr').hide();
+						$('#changes').find('h4').text('For [ '+imgTag+' ]');
+						$.getJSON('container_change.php',{ctnerId:ctnerId},function(json){
+							btn.button('reset');
+							var chgtbdy=$('#chgTbody');
+							$.each(json,function(index,value){
+								var tr=$('<tr>');
+								$.each(value,function(key,item){
+									// alert(key+' || '+item);
+									var td=$('<td>');
+									td.text(item);
+									tr.append(td);
+								});
+								chgtbdy.append(tr);	
+							});
 						});
 					});
 

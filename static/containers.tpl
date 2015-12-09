@@ -39,8 +39,8 @@
 				<ul class='nav nav-tabs nav-justified'>
 					<li class='active'><a id='process' href='#ps' data-toggle='tab'>Processes</a></li>
 					<!-- <li><a href='#registry' data-toggle='tab'>Registry</a></li> -->
-					<li><a href='#history' data-toggle='tab'>History</a></li>
-					<li><a href='#inspect' data-toggle='tab'>Inspect</a></li>
+					<li><a href='#changes' data-toggle='tab' data-loading-text='Loading.....'>Changes On Filesystem</a></li>
+					<li><a href='#inspect' data-toggle='tab' data-loading-text='Loading.....'>Inspect</a></li>
 				</ul>
 
 				<div class="tab-content">
@@ -64,22 +64,19 @@
 						registry
 					</div> -->
 					<!-- history标签 -->
-					<div class='tab-pane' id="history">
+					<div class='tab-pane' id="changes">
 						<p></p>
 						<div class="panel panel-danger">
 						<!-- <div class="panel panel-warning"> -->
 							<div class="panel-heading">
 								<h4 class="panel-title"></h4>
 							</div>
-							<table class='table table-condensed table-striped' id='hstrytable'>
+							<table class='table table-condensed table-striped'>
 								<thead>
-									<th>Image</th>
-									<th>Created</th>
-									<th>Created By</th>
-									<th>Size</th>
-									<th>Comment</th>
+									<th>Path</th>
+									<th>Kind</th>
 								</thead>
-								<tbody id='hstryTbody'></tbody>	
+								<tbody id='chgTbody'></tbody>	
 							</table>
 						</div>
 					</div>

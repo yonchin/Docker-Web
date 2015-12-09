@@ -1,10 +1,10 @@
 <?php
-	
+	include 'config.php';
 	date_default_timezone_set('UTC');
 
 	 isset($_GET['all']) ? $imgAll=$_GET['all'] : $imgAll=0;
 
-	$images=file_get_contents('http://192.168.1.103:2375/images/json?all='.$imgAll);
+	$images=file_get_contents(DOCKER_URL.'/images/json?all='.$imgAll);
 
 	//将json数据转换为多维数组
 	$images=json_decode($images,true);

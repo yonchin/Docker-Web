@@ -1,6 +1,6 @@
 <?php
 //获取客户端传来的要删除的镜像id
-
+include 'config.php';
 // print_r($_POST);
 $srcImgId=$_POST['srcImgId'];
 list($newTag['repo'],$newTag['tag'])=explode(':', $_POST['newTag']);
@@ -12,7 +12,7 @@ if(! isset($newTag['tag'])){
 
 //初始化curl
 	$ch = curl_init();
-	$url="http://192.168.1.103:2375/images/$srcImgId/tag?repo={$newTag['repo']}&force=0&tag={$newTag['tag']}";
+	$url=DOCKER_URL."/images/$srcImgId/tag?repo={$newTag['repo']}&force=0&tag={$newTag['tag']}";
 	// $url="http://192.168.1.103:2375/images/17583c7dd0da/tag?repo=myrepo.com/test&force=0&tag=v5";
 	curl_setopt($ch, CURLOPT_URL, $url);
 	curl_setopt($ch, CURLOPT_HEADER, false);
