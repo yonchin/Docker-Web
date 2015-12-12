@@ -30,8 +30,15 @@ $(function(){
 							btn.button('reset').removeClass('btn-danger').addClass('btn-warning');
 							switch(data){
 								case '200':
-									$('#imgTbody').find('tr').hide();
-									getJsonData('img_list.php',{all:0},'#imgTbody');
+									// $('#imgTbody').find('tr').hide();
+									// getJsonData('img_list.php',{all:0},'#imgTbody');
+									//隐藏前面的行
+									// $('#imgTbody').find('tr').hide();
+									if($.trim($('#dsplyAll').find('strong').text()) == 'Display All'){
+										getJsonData('img_list.php',{all:0},'#imgTbody');
+									}else if($.trim($('#dsplyAll').find('strong').text()) == 'Default'){
+										getJsonData('img_list.php',{all:1},'#imgTbody');
+									}
 									break;
 								case '404' :
 									alert('No such image');
@@ -43,13 +50,7 @@ $(function(){
 									alert('Server error');
 									break;
 							}
-							//隐藏前面的行
-							$('#imgTbody').find('tr').hide();
-							if($.trim($('#dsplyAll').find('strong').text()) == 'Display All'){
-								getJsonData('img_list.php',{all:0},'#imgTbody');
-							}else if($.trim($('#dsplyAll').find('strong').text()) == 'Default'){
-								getJsonData('img_list.php',{all:1},'#imgTbody');
-							}
+							
 
 							// $('#imgTbody :checked').parent().parent().remove();
 						});
@@ -91,7 +92,7 @@ $(function(){
 								break;
 						}	
 						$('#imgModal').modal('hide');	
-						$('#imgTbody').find('tr').hide();
+						// $('#imgTbody').find('tr').hide();
 						$('#newTagIpt').val(null);
 						getJsonData('img_list.php',{all:0},'#imgTbody');
 					});
@@ -151,7 +152,7 @@ $(function(){
 							switch(data){
 								case '200' :
 									btn.button('reset').removeClass('btn-info').addClass('btn-success');
-									$('#imgTbody').find('tr').hide();
+									// $('#imgTbody').find('tr').hide();
 									getJsonData('img_list.php',{all:0},'#imgTbody');
 									$('#imgCrtModal').modal('hide');
 									break;
@@ -180,48 +181,8 @@ $(function(){
 
 
 				// 删除选定的容器
-				$('#delCtner').click(function(){
-					var btn=$(this).removeClass('btn-warning').addClass('btn-danger').button('loading');
-					if($('#ctnerTbody :checkbox').is(':checked')){
-						var ctnerId=function(){
-								var ctnerId='';
-								$('#ctnerTbody :checked').each(function(key,value){
-									ctnerId += $(this).parent().next().find('a').text()+' ';
-								});
-								return ctnerId;	
-							}();	
-						// alert(imgNameId);
-						// 将选定的镜像发送到服务端删除
-						$.get('container_del.php', {nameId:ctnerId},function(data){
-							btn.button('reset').removeClass('btn-danger').addClass('btn-warning');
-							switch(data){
-								case '204':
-									$('#ctnerTbody').find('tr').hide();
-									getJsonData('container_list.php',{all:0},'#ctnerTbody');
-									break;
-								case '400' :
-									alert('bad parameter');
-									break;
-								case '404' :
-									alert('No such container');
-									break;
-								case '500' :
-									alert('Server error');
-									break;
-							}
-							//隐藏前面的行
-							$('#ctnerTbody').find('tr').hide();
-							if($.trim($('#dsplyAll').find('strong').text()) == 'Display All'){
-								getJsonData('container_list.php',{all:0},'#ctnerTbody');
-							}else if($.trim($('#dsplyAll').find('strong').text()) == 'Default'){
-								getJsonData('container_list.php',{all:1},'#ctnerTbody');
-							}
-
-							// $('#imgTbody :checked').parent().parent().remove();
-						});
-					}else{
-						alert('请选择要删除的容器！');
-					}
+				$('#delCtner').click(function(event){
+					container_cmd('container_del.php',event);
 				});
 
 				$('#ctnerTbody').on('click','a',function(){
@@ -280,8 +241,35 @@ $(function(){
 							});
 						});
 					});
-
 				});	
+				//对容器的一些操作动作，如start,stop等
+				$('#ctnerPanel').on('click','#start',function(event){
+					container_cmd('container_cmd.php',event,'start');
+				});
+				//对容器的一些操作动作，如start,stop等
+				$('#ctnerPanel').on('click','#stop',function(event){
+					container_cmd('container_cmd.php',event,'stop');
+				});
+				//对容器的一些操作动作，如start,stop等
+				$('#ctnerPanel').on('click','#restart',function(event){
+					container_cmd('container_cmd.php',event,'restart');
+				});
+				//对容器的一些操作动作，如start,stop等
+				$('#ctnerPanel').on('click','#kill',function(event){
+					container_cmd('container_cmd.php',event,'kill');
+				});
+				//对容器的一些操作动作，如start,stop等
+				$('#ctnerPanel').on('click','#rename',function(event){
+					container_cmd('container_cmd.php',event,'rename');
+				});
+				//对容器的一些操作动作，如start,stop等
+				$('#ctnerPanel').on('click','#pause',function(event){
+					container_cmd('container_cmd.php',event,'pause');
+				});
+				//对容器的一些操作动作，如start,stop等
+				$('#ctnerPanel').on('click','#unpause',function(event){
+					container_cmd('container_cmd.php',event,'unpause');
+				});
 			}
 		});
 	});
@@ -293,13 +281,11 @@ $(function(){
 
 	//获取json数据并将其放入表格
 	function getJsonData(url,data,tbodyId){
-		// var modalId=tbodyId.substr(1,-5)+"Modal";
 		var modalId=tbodyId.slice(0,-5)+"Modal";
-
-		$.getJSON(url,data,function(json){
+		var obj=$.getJSON(url,data,function(json){
+			$(tbodyId).find('tr').remove();
 			$('h4').find('span').text($(json).length);
 			// 将Json数据添加为表格的一行
-			// var tbdy=$('#imgTbody');
 			var tbdy=$(tbodyId);
 			$.each(json,function  (key,value) {
 				var tr=$('<tr>');
@@ -322,6 +308,7 @@ $(function(){
 				tbdy.append(tr);	
 			});
 		});
+		return obj;
 	}
 
 	//点击复选框,获取得单个或多个镜像的名称
@@ -343,14 +330,13 @@ $(function(){
 
 	function dsplyAlltoDefault(url,tbodyId){
 		var clkCount=0;
-		$('#dsplyAll').click(function(){
+		$('#dsplyAll').click(function(e){
+		// $('#ctnerPanel').on('click','#dsplyAll',function(){
 			if(clkCount%2 == 0){
-				$(tbodyId).find('tr').hide();
 				$('#full').prop('checked', false);
 				$(this).removeClass('btn-info').addClass('btn-primary').html('<strong> Default </strong>');
 				getJsonData(url,{all:1},tbodyId);
 			}else if(clkCount%2 == 1){
-				$(tbodyId).find('tr').hide();
 				$('#full').prop('checked', false);
 				$(this).removeClass('btn-primary').addClass('btn-info').html('<strong>Display All</strong>');
 				getJsonData(url,{all:0},tbodyId);
@@ -371,6 +357,56 @@ $(function(){
 		});
 	}
 
+	function container_cmd(url,event,cmd){
+		var btn=$(event.currentTarget).button('loading');
+		if($('#ctnerTbody :checkbox').is(':checked')){
+			var ctnerId=function(){
+				var ctnerId='';
+				$('#ctnerTbody :checked').each(function(key,value){
+					ctnerId += $(this).parent().next().find('a').text()+' ';
+				});
+				return ctnerId;	
+			}();
+			
+			$.post(url,{ctnerId:ctnerId,cmd:cmd},function(data,textStatus,xhr){
+				switch(data){
+					case '204':
+						if($.trim($('#dsplyAll').find('strong').text()) == 'Display All'){
+							getJsonData('container_list.php',{all:0},'#ctnerTbody').done(function(data,textStatus,xhr){
+								if(xhr.status == '200'){
+									btn.button('reset');
+									$('#full').prop('checked', false);
+								}
+							});
+						}else if($.trim($('#dsplyAll').find('strong').text()) == 'Default'){
+							getJsonData('container_list.php',{all:1},'#ctnerTbody').done(function(){
+								if(xhr.status == '200'){
+									btn.button('reset');
+									$('#full').prop('checked', false);
+								}
+							}); 
+						}
+						break;
+					case '304' :
+						alert('container already '+cmd+'ed');
+						break;
+					case '400' :
+						alert('bad parameter');
+						break;
+					case '404' :
+						alert('No such container');
+						break;
+					case '500' :
+						alert('Server error');
+						break;
+				}	
+				btn.button('reset');
+			});
+		}else{
+			alert('请选择要进行操作的容器！');
+			btn.button('reset');
+		}
+	}
 
 
 });

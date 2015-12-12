@@ -1,7 +1,7 @@
 <?php
 include 'config.php';
 //获取客户端传来的要删除的镜像id
-$containers=trim($_GET['nameId']);
+$containers=trim($_POST['ctnerId']);
 $containersArr=explode(' ',$containers);
 
 //初始化curl

@@ -1,13 +1,32 @@
 
-<div class="panel panel-default">
+<div class="panel panel-default" id='ctnerPanel'>
 	<div class="panel-heading clearfix">
-		<h4 class="panel-title pull-left" style="padding-top: 7.5px;">Containers <span class='badge'>0</span></h4>
-		<div class="btn-group pull-right">
-			<a id='dsplyAll' href="#" class="btn btn-info btn-sm"><strong>Display All</strong></a>
+		<div class="row">
+			<div class="col-xs-12 col-md-3">
+				<h4 class="panel-title pull-left" style="padding-top: 7.5px;">Containers <span class='badge'>0</span></h4>
+			</div>
+			<div class="col-xs-12 col-md-6">
+				<div class="btn-group">
+					<a id='start' href="#" class="btn btn-default btn-sm" data-loading-text='Starting...'><strong>Start</strong></a>
+					<a id='stop' href="#" class="btn btn-default btn-sm" data-loading-text='Stopping'><strong>Stop</strong></a>
+					<a id='restart' href="#" class="btn btn-default btn-sm" data-loading-text='Stopping'><strong>Restart</strong></a>
+					<a id='kill' href="#" class="btn btn-default btn-sm" data-loading-text='Killing...'><strong>Kill</strong></a>
+					<a id='rename' href="#" class="btn btn-default btn-sm"><strong>Rename</strong></a>
+					<a id='pause' href="#" class="btn btn-default btn-sm"><strong>Pause</strong></a>
+					<a id='unpause' href="#" class="btn btn-default btn-sm"><strong>Unpause</strong></a>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-3">
+				<div class="btn-group pull-right">
+					<a id='dsplyAll' href="#" class="btn btn-info btn-sm" data-loading-text='Loading......'><strong>Display All</strong></a>
 
-			<a id='delCtner' href="#" class="btn btn-warning btn-sm" data-loading-text='Deleting'><strong>Delete</strong></a>
-			<a href="#ctnerCrtModal" class="btn btn-default btn-sm" data-toggle='modal'><strong>Create</strong></a>
+					<a id='delCtner' href="#" class="btn btn-warning btn-sm" data-loading-text='Deleting...'><strong>Delete</strong></a>
+					<a href="#ctnerCrtModal" class="btn btn-default btn-sm" data-toggle='modal'><strong>Create</strong></a>
+				</div>
+			</div>
+						
 		</div>
+
 	</div>
 		
 	<table class="table table-hover table-responsive">
@@ -20,7 +39,7 @@
 				<th>Command</th>
 				<th>Created</th>
 				<th>Status</th>
-				<th>Posrts</th>
+				<th>Ports</th>
 			</tr>
 		</thead>
 		<tbody id='ctnerTbody'></tbody>
@@ -33,7 +52,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<a class="close" data-dismiss='modal'>&times;</a>
-				<h5 class='modal-title'>Repository</h5>
+				<h5 class='modal-title'>Container</h5>
 			</div>	
 			<div class="modal-body">
 				<ul class='nav nav-tabs nav-justified'>

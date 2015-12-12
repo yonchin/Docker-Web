@@ -14,6 +14,7 @@
 	foreach ($containers as $k => $val) {
 		$Id=substr($val['Id'],0,12);
 		$Names=substr($val['Names'][0],1);
+		$Image=substr($val['Image'],0,30);
 		$Command=substr($val['Command'],0,20);
 		$Created=date('Y-m-d_H:i:s',$val['Created']);
 		foreach($val['Ports'] as $value){ 
@@ -23,7 +24,7 @@
 				$Ports .= $value["PrivatePort"].'/'.$value['Type']."\n"; 
 			} 
 		} 
-		$line=$Id.','.$Names.','.$val['Image'].','.$Command.','.$Created.','.$val['Status'].','.nl2br($Ports);
+		$line=$Id.','.$Names.','.$Image.','.$Command.','.$Created.','.$val['Status'].','.nl2br($Ports);
 		$arr[]=explode(',',$line);
 	}
 

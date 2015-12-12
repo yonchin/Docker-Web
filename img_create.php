@@ -48,7 +48,7 @@ $opt=array(
     CURLOPT_INFILE => $file,
     CURLOPT_INFILESIZE => $size,
     CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_VERBOSE => true
+    // CURLOPT_VERBOSE => true
 );
 
 curl_setopt_array($ch,$opt);
