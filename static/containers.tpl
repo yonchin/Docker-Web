@@ -11,7 +11,7 @@
 					<a id='stop' href="#" class="btn btn-default btn-sm" data-loading-text='Stopping'><strong>Stop</strong></a>
 					<a id='restart' href="#" class="btn btn-default btn-sm" data-loading-text='Stopping'><strong>Restart</strong></a>
 					<a id='kill' href="#" class="btn btn-default btn-sm" data-loading-text='Killing...'><strong>Kill</strong></a>
-					<a id='rename' href="#" class="btn btn-default btn-sm"><strong>Rename</strong></a>
+					<!-- <a id='rename' href="#" class="btn btn-default btn-sm"><strong>Rename</strong></a> -->
 					<a id='pause' href="#" class="btn btn-default btn-sm"><strong>Pause</strong></a>
 					<a id='unpause' href="#" class="btn btn-default btn-sm"><strong>Unpause</strong></a>
 				</div>
@@ -55,16 +55,33 @@
 				<h5 class='modal-title'>Container</h5>
 			</div>	
 			<div class="modal-body">
-				<ul class='nav nav-tabs nav-justified'>
-					<li class='active'><a id='process' href='#ps' data-toggle='tab'>Processes</a></li>
+				<ul class='nav nav-tabs nav-justified' id='ctnerTab'>
+					<li class='active'><a id='process' href='#rename' data-toggle='tab'>Rename</a></li>
+					<li><a id='process' href='#ps' data-toggle='tab'>Processes</a></li>
 					<!-- <li><a href='#registry' data-toggle='tab'>Registry</a></li> -->
 					<li><a href='#changes' data-toggle='tab' data-loading-text='Loading.....'>Changes On Filesystem</a></li>
 					<li><a href='#inspect' data-toggle='tab' data-loading-text='Loading.....'>Inspect</a></li>
 				</ul>
 
 				<div class="tab-content">
-					<!-- tag标签 -->
-					<div class='tab-pane active' id='ps'>
+					<!-- rename标签 -->
+					<p></p>
+					<div class='tab-pane active' id="rename">
+						<form id='renameForm'>
+							<div class="form-group">
+								<label>Old Name</label>
+								<input class="form-control" id='oldCtnerName' type='text' placeholder='Old name' disabled/>
+							</div>
+							<div class="form-group">
+								<label>New Name</label>
+								<input class="form-control" id='newCtnerName' type='text' name='newCtnerName' placeholder='New Name'/>
+							</div>
+							<button class='btn btn-default' data-dismiss='modal'>Cancel</button>
+							<button class='btn btn-success pull-right' id='renameCtnerSbmt'>Submit</button>	
+						</form>		
+					</div>
+					<!-- process标签 -->
+					<div class='tab-pane' id='ps'>
 						<p></p>
 						<div class="panel panel-danger">
 						<!-- <div class="panel panel-warning"> -->
@@ -78,10 +95,7 @@
 							</table>
 						</div>
 					</div>
-					<!-- registry标签 -->
-					<!-- <div class='tab-pane' id="registry">
-						registry
-					</div> -->
+					
 					<!-- history标签 -->
 					<div class='tab-pane' id="changes">
 						<p></p>
@@ -159,4 +173,34 @@
 				<button id='ctnerCrtBtn' class='btn btn-success' data-loading-text='Creating......'>Create</button>
 			</div>
 		</div>
-	</div> </div>
+	</div> 
+</div>
+
+<!-- rename container -->
+<div class="modal" id='renameModal' tabindex='-1'>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<a href="#" class="close" data-dismiss='modal'>&times;</a>
+				<h5 class='modal-tilte'>Rename Container</h5>	
+			</div>
+			<div class="modal-body">
+				<form id='renameForm'>
+					<div class="form-group">
+						<label>Old Name</label>
+						<input class="form-control" type='text' placeholder='Old name' disabled/>
+					</div>
+					<div class="form-group">
+						<label>New Name</label>
+						<input class="form-control" id='newCtnerName' type='text' name='newCtnerName' placeholder='New Name'/>
+					</div>
+					<button class='btn btn-default' data-dismiss='modal'>Cancel</button>
+					<button class='btn btn-success pull-right' id='tagSubmit'>Submit</button>	
+				</form>		
+			</div>
+			<div class="modal-footer">
+				
+			</div>
+		</div>
+	</div>	
+</div>

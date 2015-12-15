@@ -5,7 +5,11 @@ date_default_timezone_set('UTC');
 if(isset($_POST['ctnerId']) && isset($_POST['cmd'])){
 	$ctnerIdArr=explode(' ',trim($_POST['ctnerId']));
 	foreach ($ctnerIdArr as  $ctnerId) {
-		$url= DOCKER_URL.'/containers/'.$ctnerId.'/'.trim($_POST['cmd']);
+		if($_POST['newCtnerName']){
+			$url= DOCKER_URL.'/containers/'.$ctnerId.'/'.trim($_POST['cmd']).'?name='.trim($_POST['newCtnerName']);
+		}else{
+			$url= DOCKER_URL.'/containers/'.$ctnerId.'/'.trim($_POST['cmd']);
+		}
 		$statusCode=dk_post($url);
 	}
 	echo $statusCode;
