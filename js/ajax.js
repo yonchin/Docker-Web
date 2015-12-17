@@ -26,24 +26,19 @@ $(function(){
 						var imgNameId=getImgsName();	
 						// alert(imgNameId);
 						// 将选定的镜像发送到服务端删除
-						$.get('img_del.php', {nameId:imgNameId},function(data){
+						// $.get('img_del.php', {nameId:imgNameId},function(data){
+						$.get('docker.php?target=DockerImage&method=del', {imgId:imgNameId},function(data){
 							btn.button('reset').removeClass('btn-danger').addClass('btn-warning');
 							switch(data){
-								case '200':
+								case 'ok':
 									if($.trim($('#dsplyAll').find('strong').text()) == 'Display All'){
-										getJsonData('img_list.php',{all:0},'#imgTbody');
+										getJsonData('docker.php?target=DockerImage&method=list',{all:0},'#imgTbody');
 									}else if($.trim($('#dsplyAll').find('strong').text()) == 'Default'){
-										getJsonData('img_list.php',{all:1},'#imgTbody');
+										getJsonData('docker.php?target=DockerImage&method=list',{all:1},'#imgTbody');
 									}
 									break;
-								case '404' :
-									alert('No such image');
-									break;
-								case '409' :
-									alert('Conflict');
-									break;
-								case '500' :
-									alert('Server error');
+								default :
+									alert(data);
 									break;
 							}
 						});
@@ -69,30 +64,21 @@ $(function(){
 						alert('不能为空!');
 						return false;
 					}
-					$.post('img_tag.php',$('#tagForm').serialize(),function(data){
+					$.get('docker.php?target=DockerImage&method=tag',$('#tagForm').serialize(),function(data){
 						switch(data){
-							case '201':
+							case 'ok':
 								if($.trim($('#dsplyAll').find('strong').text()) == 'Display All'){
-									getJsonData('img_list.php',{all:0},'#imgTbody');
+									getJsonData('docker.php?target=DockerImage&method=list',{all:0},'#imgTbody');
 									$('#imgModal').modal('hide');	
 									$('#newTagIpt').val(null);
 								}else if($.trim($('#dsplyAll').find('strong').text()) == 'Default'){
-									getJsonData('img_list.php',{all:1},'#imgTbody');
+									getJsonData('docker.php?target=DockerImage&method=list',{all:1},'#imgTbody');
 									$('#imgModal').modal('hide');	
 									$('#newTagIpt').val(null);
 								}
 								break;
-							case '400' :
-								alert('Bad parameter !');
-								break;
-							case '404' :
-								alert('No such image');
-								break;
-							case '409' :
-								alert('Conflict');
-								break;
-							case '500' :
-								alert('Server error');
+							default:
+								alert(data);
 								break;
 						}	
 						
@@ -106,7 +92,7 @@ $(function(){
 					imgTag= $(this).parent().parent().find('td').eq(3).text()+':'+ $(this).parent().parent().find('td').eq(4).text();
 					imgId=$(this).text();
 					$('#history').find('h4').text('For [ '+imgTag+' ]');
-					$.getJSON('img_history.php',{imgId:imgId},function(json){
+					$.getJSON('docker.php?target=DockerImage&method=history',{imgId:imgId},function(json){
 						var tbdy=$('#hstryTbody');
 						$.each(json,function(key,value){
 							var tr=$('<tr>');
@@ -125,7 +111,7 @@ $(function(){
 					imgTag= $(this).parent().parent().find('td').eq(3).text()+':'+ $(this).parent().parent().find('td').eq(4).text();
 					imgId=$(this).text();
 					$('#inspect').find('h4').text('For [ '+imgTag+' ]');
-					$.getJSON('img_inspect.php',{imgId:imgId},function(json){
+					$.getJSON('docker.php?target=DockerImage&method=inspect',{imgId:imgId},function(json){
 						$('#inspect').find('pre').text(JSON.stringify(json,null,"\t"));
 					});
 				});	
@@ -432,14 +418,16 @@ $(function(){
 				switch(data){
 					case 'ok':
 						if($.trim($('#dsplyAll').find('strong').text()) == 'Display All'){
-							getJsonData('container_list.php',{all:0},'#ctnerTbody').done(function(data,textStatus,xhr){
+							// getJsonData('container_list.php',{all:0},'#ctnerTbody').done(function(data,textStatus,xhr){
+							getJsonData('docker.php?target=DockerContainer&method=list',{all:0},'#ctnerTbody').done(function(data,textStatus,xhr){
 								if(xhr.status == '200'){
 									btn.button('reset');
 									$('#full').prop('checked', false);
 								}
 							});
 						}else if($.trim($('#dsplyAll').find('strong').text()) == 'Default'){
-							getJsonData('container_list.php',{all:1},'#ctnerTbody').done(function(){
+							// getJsonData('docker.php?target=DockerContainer&method=list',{all:0},'#ctnerTbody');
+							getJsonData('docker.php?target=DockerContainer&method=list',{all:1},'#ctnerTbody').done(function(){
 								if(xhr.status == '200'){
 									btn.button('reset');
 									$('#full').prop('checked', false);

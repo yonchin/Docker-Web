@@ -50,7 +50,7 @@
 							<div class="form-group">
 								<label>Source Tag</label>
 								<input class="form-control" id='srcTagIpt' type='text' placeholder='Source Tag' disabled/>
-								<input id='srcImgId' type="hidden" name='srcImgId'>
+								<input id='srcImgId' type="hidden" name='imgId'>
 							</div>
 							<div class="form-group">
 								<label>New Tag</label>

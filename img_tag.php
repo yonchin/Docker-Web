@@ -2,8 +2,8 @@
 //获取客户端传来的要删除的镜像id
 include 'config.php';
 // print_r($_POST);
-$srcImgId=$_POST['srcImgId'];
-list($newTag['repo'],$newTag['tag'])=explode(':', $_POST['newTag']);
+$srcImgId=$_GET['imgId'];
+list($newTag['repo'],$newTag['tag'])=explode(':', $_GET['newTag']);
 if(! isset($newTag['tag'])){
 	$newTag['tag']='latest';
 }

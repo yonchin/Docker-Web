@@ -10,14 +10,11 @@ class CurlMethod {
 	public $fp; //文件句柄
 	public $code=''; //存放http请求码
 
-	// public function __construct($url, $header=array()){
 	public function __construct(){
 		$this->ch=curl_init();
 		$this->opt=array(
-				// CURLOPT_URL => $url,
 				CURLOPT_HEADER => 0,
 				CURLOPT_RETURNTRANSFER => 1,
-				// CURLOPT_HTTPHEADER => $header,
 			);
 	}
 
@@ -72,17 +69,17 @@ class CurlMethod {
 	public function curlHttpCode(){
 		$code=curl_getinfo($this->ch,CURLINFO_HTTP_CODE);
 		switch ($code) {
-			case '200' || '204':
+			case '200' || '204' || '201':
 				$status='ok';
 				break;
 			case '304' :
-				$status='container already ready';
+				$status='image or container already ready';
 				break;
 			case '400' :
 				$status='bad parameter';
 				break;
 			case '404' :
-				$status='No such container';
+				$status='No such container or image';
 				break;
 			case '409' :
 				$status='conflict';

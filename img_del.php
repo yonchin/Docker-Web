@@ -2,7 +2,7 @@
 
 //获取客户端传来的要删除的镜像id
 include 'config.php';
-$images=trim($_GET['nameId']);
+$images=trim($_GET['imgId']);
 $imagesArr=explode(' ',$images);
 
 //初始化curl
