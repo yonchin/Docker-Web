@@ -178,16 +178,20 @@ $(function(){
 		$('.col-md-10').load('./static/containers.tpl',function(respsonse,status,xhr){
 			if(status == 'success'){
 				//加载默认容器列表
-				getJsonData('container_list.php',{all:0},'#ctnerTbody');
+				// getJsonData('container_list.php',{all:0},'#ctnerTbody');
+				getJsonData('docker.php?target=DockerContainer&method=list',{all:0},'#ctnerTbody');
 				//实现容器默认列表与全部列表的相互转换
-				dsplyAlltoDefault('container_list.php','#ctnerTbody');
+				// dsplyAlltoDefault('container_list.php','#ctnerTbody');
+				dsplyAlltoDefault('docker.php?target=DockerContainer&method=list','#ctnerTbody');
 				//实现进行全选与反选
 				fullCheckedOrNot('#ctnerTbody');
 
 
 				// 删除选定的容器
 				$('#delCtner').click(function(event){
-					container_cmd('container_del.php',event);
+					// container_cmd('container_del.php',event);
+					// container_cmd('docker.php?method=stop',event);
+					container_cmd('docker.php?method=del',event);
 				});
 
 				$('#ctnerTbody').on('click','a',function(){
@@ -200,30 +204,27 @@ $(function(){
 					//提交新容器名
 					$('#ctnerModal').off('click').on('click','#renameCtnerSbmt',function(){
 						$('#renameForm').ajaxSubmit({
-							url:'container_cmd.php',
-							type:'POST',
-							data: {ctnerId:ctnerId,cmd:'rename'},
+							// url:'container_cmd.php',
+							url:'docker.php?target=DockerContainer&method=rename',
+							type:'GET',
+							data: {ctnerId:ctnerId},
 							success:function(data){
 								switch(data){
-									case '204':
+									case 'ok':
 										if($.trim($('#dsplyAll').find('strong').text()) == 'Display All'){
-											getJsonData('container_list.php',{all:0},'#ctnerTbody');
+											// getJsonData('container_list.php',{all:0},'#ctnerTbody');
+											getJsonData('docker.php?target=DockerContainer&method=list',{all:0},'#ctnerTbody');
 											$('#ctnerModal').modal('hide');
 											$('#newCtnerName').val(null);
 										}else if($.trim($('#dsplyAll').find('strong').text()) == 'Default'){
-											getJsonData('container_list.php',{all:1},'#ctnerTbody');
+											// getJsonData('container_list.php',{all:1},'#ctnerTbody');
+											getJsonData('docker.php?target=DockerContainer&method=list',{all:1},'#ctnerTbody');
 											$('#ctnerModal').modal('hide');
 											$('#newCtnerName').val(null);
 										}
 										break;
-									case '404' :
-										alert('No such container');
-										break;
-									case '409' :
-										alert('conflict name already assigned');
-										break;
-									case '500' :
-										alert('Server error');
+									default:
+										alert(data);
 										break;
 								}	
 							}	
@@ -234,7 +235,8 @@ $(function(){
 					//获取容器的processes
 					$('#ctnerModal').off('click','a[href="#ps"]').on('click','a[href="#ps"]',function(){
 						var btn=$(this).button('loading');
-						$.getJSON('container_top.php',{ctnerId:ctnerId},function(json){
+						// $.getJSON('container_top.php',{ctnerId:ctnerId},function(json){
+						$.getJSON('docker.php?target=DockerContainer&method=top',{ctnerId:ctnerId},function(json){
 							$('#psThead').find('th').remove();
 							$('#psTbody').find('tr').remove();
 							$('#ps').find('h4').text('For [ '+imgTag+' ]');
@@ -263,7 +265,8 @@ $(function(){
 					$('#ctnerModal').off('click','a[href="#changes"]').on('click','a[href="#changes"]',function(){
 						var btn=$(this).button('loading');
 						$('#changes').find('h4').text('for [ '+imgTag+' ]');
-						$.getJSON('container_change.php',{ctnerId:ctnerId},function(json){
+						// $.getJSON('container_change.php',{ctnerId:ctnerId},function(json){
+						$.getJSON('docker.php?target=DockerContainer&method=change',{ctnerId:ctnerId},function(json){
 							$('#changes').find('tr').remove();
 							var chgTbdy=$('#chgTbody');
 							$.each(json,function(index,value){
@@ -284,7 +287,8 @@ $(function(){
 					$('#ctnerModal').off('click','a[href="#inspect"]').on('click','a[href="#inspect"]',function(){
 						var btn=$(this).button('loading');
 						$('#inspect').find('h4').text('For [ '+imgTag+' ]');
-						$.getJSON('container_inspect.php',{ctnerId:ctnerId},function(json){
+						// $.getJSON('container_inspect.php',{ctnerId:ctnerId},function(json){
+						$.getJSON('docker.php?target=DockerContainer&method=inspect',{ctnerId:ctnerId},function(json){
 							$('#inspect').find('pre').text(JSON.stringify(json,null,"\t"));
 							btn.button('reset');
 						});
@@ -295,28 +299,35 @@ $(function(){
 
 				//对容器的一些操作动作，如start,stop等
 				$('#ctnerPanel').on('click','#start',function(event){
-					container_cmd('container_cmd.php',event,'start');
+					// container_cmd('container_cmd.php',event);
+					container_cmd('docker.php?method=start',event);
 				});
 				//对容器的一些操作动作，如start,stop等
 				$('#ctnerPanel').on('click','#stop',function(event){
-					container_cmd('container_cmd.php',event,'stop');
+					// container_cmd('container_cmd.php',event);
+					container_cmd('docker.php?method=stop',event);
 				});
 				//对容器的一些操作动作，如start,stop等
 				$('#ctnerPanel').on('click','#restart',function(event){
-					container_cmd('container_cmd.php',event,'restart');
+					container_cmd('docker.php?method=restart',event);
+					// container_cmd('container_cmd.php',event);
 				});
 				//对容器的一些操作动作，如start,stop等
 				$('#ctnerPanel').on('click','#kill',function(event){
-					container_cmd('container_cmd.php',event,'kill');
+					container_cmd('docker.php?method=kill',event);
+					// container_cmd('container_cmd.php',event);
 				});
-				
+			
+
 				//对容器的一些操作动作，如start,stop等
 				$('#ctnerPanel').on('click','#pause',function(event){
-					container_cmd('container_cmd.php',event,'pause');
+					container_cmd('docker.php?method=pause',event);
+					// container_cmd('container_cmd.php',event);
 				});
 				//对容器的一些操作动作，如start,stop等
 				$('#ctnerPanel').on('click','#unpause',function(event){
-					container_cmd('container_cmd.php',event,'unpause');
+					container_cmd('docker.php?method=unpause',event);
+					// container_cmd('container_cmd.php',event);
 				});
 			}
 		});
@@ -405,7 +416,7 @@ $(function(){
 		});
 	}
 
-	function container_cmd(url,event,cmd){
+	function container_cmd(url,event){
 		var btn=$(event.currentTarget).button('loading');
 		if($('#ctnerTbody :checkbox').is(':checked')){
 			var ctnerId=function(){
@@ -416,9 +427,10 @@ $(function(){
 				return ctnerId;	
 			}();
 			
-			$.post(url,{ctnerId:ctnerId,cmd:cmd},function(data,textStatus,xhr){
+			// $.post(url,{ctnerId:ctnerId,cmd:cmd},function(data,textStatus,xhr){
+			$.get(url,{target:'DockerContainer',ctnerId:ctnerId},function(data,textStatus,xhr){
 				switch(data){
-					case '204':
+					case 'ok':
 						if($.trim($('#dsplyAll').find('strong').text()) == 'Display All'){
 							getJsonData('container_list.php',{all:0},'#ctnerTbody').done(function(data,textStatus,xhr){
 								if(xhr.status == '200'){
@@ -435,18 +447,21 @@ $(function(){
 							}); 
 						}
 						break;
-					case '304' :
-						alert('container already '+cmd+'ed');
+					default:
+						alert(data);
 						break;
-					case '400' :
-						alert('bad parameter');
-						break;
-					case '404' :
-						alert('No such container');
-						break;
-					case '500' :
-						alert('Server error');
-						break;
+					// case '304' :
+					// 	alert('container already '+cmd+'ed');
+					// 	break;
+					// case '400' :
+					// 	alert('bad parameter');
+					// 	break;
+					// case '404' :
+					// 	alert('No such container');
+					// 	break;
+					// case '500' :
+					// 	alert('Server error');
+					// 	break;
 				}	
 				btn.button('reset');
 			});
