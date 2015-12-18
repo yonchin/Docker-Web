@@ -1,2 +1,2 @@
-FROM A
-RUN echo 'this is aaaaaaaaaaaaaaa'
+FROM busybox:v0
+RUN echo 'asdfasdf'

@@ -10,23 +10,20 @@ $(function(){
 		$('.col-md-10').load('./static/images.tpl',function(respsonse,status,xhr){
 			if(status == 'success'){
 				//页面首次加载后需要显示一次数据
-				getJsonData('img_list.php',{all:0},'#imgTbody');
+				getJsonData('docker.php?target=DockerImage&method=list',{all:0},'#imgTbody');
 
 				//全部镜像与默认相互切换
-				dsplyAlltoDefault('img_list.php','#imgTbody');
+				dsplyAlltoDefault('docker.php?target=DockerImage&method=list','#imgTbody');
 			
 				//实现进行全选与反选
 				fullCheckedOrNot('#imgTbody');
-				
 
 				// 删除选定的镜像
 				$('#delImg').click(function(){
 					var btn=$(this).removeClass('btn-warning').addClass('btn-danger').button('loading');
 					if($('#imgTbody :checkbox').is(':checked')){
 						var imgNameId=getImgsName();	
-						// alert(imgNameId);
 						// 将选定的镜像发送到服务端删除
-						// $.get('img_del.php', {nameId:imgNameId},function(data){
 						$.get('docker.php?target=DockerImage&method=del', {imgId:imgNameId},function(data){
 							btn.button('reset').removeClass('btn-danger').addClass('btn-warning');
 							switch(data){
@@ -46,75 +43,64 @@ $(function(){
 						alert('请选择要删除的镜像！');
 					}
 				});
-
-				//镜像获取镜像的id并将其填充到input中,此处必须用on事件委托的形式，否则无法绑定事件
+				
 				$('#imgTbody').on('click','a',function() {
+					$('#imgTab a:first').tab('show');
 					imgTag= $(this).parent().parent().find('td').eq(3).text()+':'+ $(this).parent().parent().find('td').eq(4).text();
 					imgId=$(this).text();
-					// alert(imgId);
 					$('#srcTagIpt').val(imgTag);
 					$('#srcImgId').val(imgId);
-				});
-
-				//对获取的镜像进行tag
-				$('#imgModal').on('click','#tagSubmit',function(){
-					$('#srcTagIpt').val(imgTag);
-					$('#srcImgId').val(imgId);
-					if($.trim($('#newTagIpt').val()).length <= 0){
-						alert('不能为空!');
-						return false;
-					}
-					$.get('docker.php?target=DockerImage&method=tag',$('#tagForm').serialize(),function(data){
-						switch(data){
-							case 'ok':
-								if($.trim($('#dsplyAll').find('strong').text()) == 'Display All'){
-									getJsonData('docker.php?target=DockerImage&method=list',{all:0},'#imgTbody');
-									$('#imgModal').modal('hide');	
-									$('#newTagIpt').val(null);
-								}else if($.trim($('#dsplyAll').find('strong').text()) == 'Default'){
-									getJsonData('docker.php?target=DockerImage&method=list',{all:1},'#imgTbody');
-									$('#imgModal').modal('hide');	
-									$('#newTagIpt').val(null);
-								}
-								break;
-							default:
-								alert(data);
-								break;
-						}	
-						
-					});
-					return false;
-				});
-
-				//获取镜像的history
-				$('#imgTbody').on('click','a',function() {
-					$('#hstryTbody').find('tr').hide();						
-					imgTag= $(this).parent().parent().find('td').eq(3).text()+':'+ $(this).parent().parent().find('td').eq(4).text();
-					imgId=$(this).text();
-					$('#history').find('h4').text('For [ '+imgTag+' ]');
-					$.getJSON('docker.php?target=DockerImage&method=history',{imgId:imgId},function(json){
-						var tbdy=$('#hstryTbody');
-						$.each(json,function(key,value){
-							var tr=$('<tr>');
-							$.each(value,function(k,val){
-								var td=$('<td>');
-								td.html(val);
-								tr.append(td);
-							});
-							tbdy.append(tr);
+					//对获取的镜像进行tag
+					$('#imgModal').off('click','#tagSubmit').on('click','#tagSubmit',function(){
+						if($.trim($('#newTagIpt').val()).length <= 0){
+							alert('不能为空!');
+							return false;
+						}
+						$.get('docker.php?target=DockerImage&method=tag',$('#tagForm').serialize(),function(data){
+							switch(data){
+								case 'ok':
+									if($.trim($('#dsplyAll').find('strong').text()) == 'Display All'){
+										getJsonData('docker.php?target=DockerImage&method=list',{all:0},'#imgTbody');
+										$('#imgModal').modal('hide');	
+										$('#newTagIpt').val(null);
+									}else if($.trim($('#dsplyAll').find('strong').text()) == 'Default'){
+										getJsonData('docker.php?target=DockerImage&method=list',{all:1},'#imgTbody');
+										$('#imgModal').modal('hide');	
+										$('#newTagIpt').val(null);
+									}
+									break;
+								default:
+									alert(data);
+									break;
+							}	
 						});
+						return false;
 					});
+					//获取镜像的history
+					$('#imgModal').off('click','a[href="#history"]').on('click','a[href="#history"]',function(){
+						$('#hstryTbody').find('tr').hide();						
+						$('#history').find('h4').text('For [ '+imgTag+' ]');
+						$.getJSON('docker.php?target=DockerImage&method=history',{imgId:imgId},function(json){
+							var tbdy=$('#hstryTbody');
+							$.each(json,function(key,value){
+								var tr=$('<tr>');
+								$.each(value,function(k,val){
+									var td=$('<td>');
+									td.html(val);
+									tr.append(td);
+								});
+								tbdy.append(tr);
+							});
+						});	
+					});
+					//获取镜像的inspect
+					$('#imgModal').off('click','a[href="#inspect"]').on('click','a[href="#inspect"]',function(){
+						$('#inspect').find('h4').text('For [ '+imgTag+' ]');
+						$.getJSON('docker.php?target=DockerImage&method=inspect',{imgId:imgId},function(json){
+							$('#inspect').find('pre').text(JSON.stringify(json,null,"\t"));
+						});
+					});	
 				});
-
-				//获取镜像的inspect
-				$('#imgTbody').on('click','a',function(){
-					imgTag= $(this).parent().parent().find('td').eq(3).text()+':'+ $(this).parent().parent().find('td').eq(4).text();
-					imgId=$(this).text();
-					$('#inspect').find('h4').text('For [ '+imgTag+' ]');
-					$.getJSON('docker.php?target=DockerImage&method=inspect',{imgId:imgId},function(json){
-						$('#inspect').find('pre').text(JSON.stringify(json,null,"\t"));
-					});
-				});	
 
 				// 默认情况下添加文件隐藏
 				$('#dkAddFile').hide();
@@ -132,23 +118,24 @@ $(function(){
 				$('#imgCrtBtn').click(function() {
 					var btn=$(this).removeClass('btn-success').addClass('btn-info').button('loading');
 					$('#createForm').ajaxSubmit({
-						url:'img_create.php',
+						url:'docker.php?target=DockerImage&method=create',
 						type:'POST',
 						data:$('#createForm').fieldSerialize(),
 						success:function(data){
+							alert(data)
 							switch(data){
-								case '200' :
+								case 'ok' :
 									btn.button('reset').removeClass('btn-info').addClass('btn-success');
 									if($.trim($('#dsplyAll').find('strong').text()) == 'Display All'){
-										getJsonData('img_list.php',{all:0},'#imgTbody');
+										getJsonData('docker.php?target=DockerImage&method=list',{all:0},'#imgTbody');
 										$('#imgCrtModal').modal('hide');
 									}else if($.trim($('#dsplyAll').find('strong').text()) == 'Default'){
-										getJsonData('img_list.php',{all:1},'#imgTbody');
+										getJsonData('docker.php?target=DockerImage&method=list',{all:1},'#imgTbody');
 										$('#imgCrtModal').modal('hide');
 									}
 									break;
-								case '500' :
-									alert('Server error');
+								default :
+									alert(data);
 									break;
 							}	
 						}
@@ -164,19 +151,14 @@ $(function(){
 		$('.col-md-10').load('./static/containers.tpl',function(respsonse,status,xhr){
 			if(status == 'success'){
 				//加载默认容器列表
-				// getJsonData('container_list.php',{all:0},'#ctnerTbody');
 				getJsonData('docker.php?target=DockerContainer&method=list',{all:0},'#ctnerTbody');
 				//实现容器默认列表与全部列表的相互转换
-				// dsplyAlltoDefault('container_list.php','#ctnerTbody');
 				dsplyAlltoDefault('docker.php?target=DockerContainer&method=list','#ctnerTbody');
 				//实现进行全选与反选
 				fullCheckedOrNot('#ctnerTbody');
 
-
 				// 删除选定的容器
 				$('#delCtner').click(function(event){
-					// container_cmd('container_del.php',event);
-					// container_cmd('docker.php?method=stop',event);
 					container_cmd('docker.php?method=del',event);
 				});
 
@@ -198,12 +180,10 @@ $(function(){
 								switch(data){
 									case 'ok':
 										if($.trim($('#dsplyAll').find('strong').text()) == 'Display All'){
-											// getJsonData('container_list.php',{all:0},'#ctnerTbody');
 											getJsonData('docker.php?target=DockerContainer&method=list',{all:0},'#ctnerTbody');
 											$('#ctnerModal').modal('hide');
 											$('#newCtnerName').val(null);
 										}else if($.trim($('#dsplyAll').find('strong').text()) == 'Default'){
-											// getJsonData('container_list.php',{all:1},'#ctnerTbody');
 											getJsonData('docker.php?target=DockerContainer&method=list',{all:1},'#ctnerTbody');
 											$('#ctnerModal').modal('hide');
 											$('#newCtnerName').val(null);
@@ -221,7 +201,6 @@ $(function(){
 					//获取容器的processes
 					$('#ctnerModal').off('click','a[href="#ps"]').on('click','a[href="#ps"]',function(){
 						var btn=$(this).button('loading');
-						// $.getJSON('container_top.php',{ctnerId:ctnerId},function(json){
 						$.getJSON('docker.php?target=DockerContainer&method=top',{ctnerId:ctnerId},function(json){
 							$('#psThead').find('th').remove();
 							$('#psTbody').find('tr').remove();
@@ -251,7 +230,6 @@ $(function(){
 					$('#ctnerModal').off('click','a[href="#changes"]').on('click','a[href="#changes"]',function(){
 						var btn=$(this).button('loading');
 						$('#changes').find('h4').text('for [ '+imgTag+' ]');
-						// $.getJSON('container_change.php',{ctnerId:ctnerId},function(json){
 						$.getJSON('docker.php?target=DockerContainer&method=change',{ctnerId:ctnerId},function(json){
 							$('#changes').find('tr').remove();
 							var chgTbdy=$('#chgTbody');
@@ -273,7 +251,6 @@ $(function(){
 					$('#ctnerModal').off('click','a[href="#inspect"]').on('click','a[href="#inspect"]',function(){
 						var btn=$(this).button('loading');
 						$('#inspect').find('h4').text('For [ '+imgTag+' ]');
-						// $.getJSON('container_inspect.php',{ctnerId:ctnerId},function(json){
 						$.getJSON('docker.php?target=DockerContainer&method=inspect',{ctnerId:ctnerId},function(json){
 							$('#inspect').find('pre').text(JSON.stringify(json,null,"\t"));
 							btn.button('reset');
@@ -285,35 +262,29 @@ $(function(){
 
 				//对容器的一些操作动作，如start,stop等
 				$('#ctnerPanel').on('click','#start',function(event){
-					// container_cmd('container_cmd.php',event);
 					container_cmd('docker.php?method=start',event);
 				});
 				//对容器的一些操作动作，如start,stop等
 				$('#ctnerPanel').on('click','#stop',function(event){
-					// container_cmd('container_cmd.php',event);
 					container_cmd('docker.php?method=stop',event);
 				});
 				//对容器的一些操作动作，如start,stop等
 				$('#ctnerPanel').on('click','#restart',function(event){
 					container_cmd('docker.php?method=restart',event);
-					// container_cmd('container_cmd.php',event);
 				});
 				//对容器的一些操作动作，如start,stop等
 				$('#ctnerPanel').on('click','#kill',function(event){
 					container_cmd('docker.php?method=kill',event);
-					// container_cmd('container_cmd.php',event);
 				});
 			
 
 				//对容器的一些操作动作，如start,stop等
 				$('#ctnerPanel').on('click','#pause',function(event){
 					container_cmd('docker.php?method=pause',event);
-					// container_cmd('container_cmd.php',event);
 				});
 				//对容器的一些操作动作，如start,stop等
 				$('#ctnerPanel').on('click','#unpause',function(event){
 					container_cmd('docker.php?method=unpause',event);
-					// container_cmd('container_cmd.php',event);
 				});
 			}
 		});
@@ -372,11 +343,9 @@ $(function(){
 		return imgNameId;
 	}
 
-
 	function dsplyAlltoDefault(url,tbodyId){
 		var clkCount=0;
 		$('#dsplyAll').click(function(e){
-		// $('#ctnerPanel').on('click','#dsplyAll',function(){
 			if(clkCount%2 == 0){
 				$('#full').prop('checked', false);
 				$(this).removeClass('btn-info').addClass('btn-primary').html('<strong> Default </strong>');
@@ -389,7 +358,6 @@ $(function(){
 			clkCount++;
 		});
 	}
-
 
 	//实现进行全选与反选
 	function fullCheckedOrNot(tbodyId){
@@ -413,12 +381,10 @@ $(function(){
 				return ctnerId;	
 			}();
 			
-			// $.post(url,{ctnerId:ctnerId,cmd:cmd},function(data,textStatus,xhr){
 			$.get(url,{target:'DockerContainer',ctnerId:ctnerId},function(data,textStatus,xhr){
 				switch(data){
 					case 'ok':
 						if($.trim($('#dsplyAll').find('strong').text()) == 'Display All'){
-							// getJsonData('container_list.php',{all:0},'#ctnerTbody').done(function(data,textStatus,xhr){
 							getJsonData('docker.php?target=DockerContainer&method=list',{all:0},'#ctnerTbody').done(function(data,textStatus,xhr){
 								if(xhr.status == '200'){
 									btn.button('reset');
@@ -426,7 +392,6 @@ $(function(){
 								}
 							});
 						}else if($.trim($('#dsplyAll').find('strong').text()) == 'Default'){
-							// getJsonData('docker.php?target=DockerContainer&method=list',{all:0},'#ctnerTbody');
 							getJsonData('docker.php?target=DockerContainer&method=list',{all:1},'#ctnerTbody').done(function(){
 								if(xhr.status == '200'){
 									btn.button('reset');
@@ -438,18 +403,6 @@ $(function(){
 					default:
 						alert(data);
 						break;
-					// case '304' :
-					// 	alert('container already '+cmd+'ed');
-					// 	break;
-					// case '400' :
-					// 	alert('bad parameter');
-					// 	break;
-					// case '404' :
-					// 	alert('No such container');
-					// 	break;
-					// case '500' :
-					// 	alert('Server error');
-					// 	break;
 				}	
 				btn.button('reset');
 			});
@@ -458,6 +411,5 @@ $(function(){
 			btn.button('reset');
 		}
 	}
-
 
 });

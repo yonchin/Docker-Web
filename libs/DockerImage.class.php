@@ -53,9 +53,18 @@ class DockerImage{
 		return json_encode($arr);
 	}
 
-	public function imgCreate($tag,$file){
-		$this->cmObj->curlPostFile($this->url.'build?t='.$tag.'&nocache=1',$file, array('Content-Type:application/tar'));	
+	public function imgCreate($tag,$dkFileData){
+		file_put_contents('Dockerfile', $dkFileData);
+		$dkfiletar=new PharData('Dockerfile.tar');
+		$dkfiletar->addFile('Dockerfile');
+		//执行此行代码后生成Dockerfile.tar.gz文件
+		$dkfiletar->compress(Phar::GZ);
+		$this->cmObj->curlPostFile(DOCKER_URL.'/build?t='.$tag.'&nocache=1','Dockerfile.tar.gz', array('Content-Type:application/tar'));	
 		return $this->cmObj->curlHttpCode();
 	}
 	
+	public function __destruct(){
+		file_exists(ROOT_PATH.'/Dockerfile.tar') && unlink(ROOT_PATH.'/Dockerfile.tar');	
+		file_exists(ROOT_PATH.'/Dockerfile.tar.gz') && unlink(ROOT_PATH.'/Dockerfile.tar.gz');	
+	}
 }

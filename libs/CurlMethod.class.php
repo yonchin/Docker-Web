@@ -42,7 +42,7 @@ class CurlMethod {
 		if(is_file($file)){
 			$this->fp=fopen($file,'r');
 			$fileSize=filesize($file);
-			$fileData=fread($file,$fileSize);
+			$fileData=fread($this->fp,$fileSize);
 		}
 		$opt=$this->opt + array(
 				CURLOPT_URL => $url,
@@ -50,7 +50,7 @@ class CurlMethod {
 				CURLOPT_CUSTOMREQUEST=> 'POST',
 				CURLOPT_INFILE=> $this->fp,
 				CURLOPT_INFILESIZE=> $fileSize,
-				CURLOPT_POSTFIELDS=> $data,
+				CURLOPT_POSTFIELDS=> $fileData,
 			);
 		curl_setopt_array($this->ch,$opt);
 		return curl_exec($this->ch);

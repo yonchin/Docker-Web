@@ -1,32 +1,12 @@
 <?php
 
-// // include 'config.php';
-// define('DOCKER_URL','http://192.168.1.104:2375');
-// define('ROOT_PATH', dirname(__FILE__));
-
-
-// // echo ROOT_PATH;
-
-
-// spl_autoload_register(function($className){
-// 	require ROOT_PATH.'/libs/'.$className.'.class.php';
-// });
-
-
-
-
-function oper($method,$args){
-
-	return  $_GET['method'] == 'start' ?  $ctnerObj->ctnerStart($ctnerIdArr) : '';
-}
-
-
-
 include 'config.php';
+//容器用变量
 $ctnerIdArr=explode(' ',trim($_GET['ctnerId']));
 $ctnerId=trim($_GET['ctnerId']);
 $newCtnerName=trim($_GET['newCtnerName']);
 
+//镜像用变量
 $imgIdArr=explode(' ',trim($_GET['imgId']));
 $imgId=trim($_GET['imgId']);
 list($newRepo,$newTag)=explode(':', $_GET['newTag']);
@@ -35,6 +15,22 @@ if(! isset($newTag)){
 }
 
 $all=$_GET['all'];
+
+//上传文件处理
+if(! empty($_FILES)){
+	foreach ($_FILES['dkAddFile']['error'] as $key => $error) {
+		if($error == UPLOAD_ERR_OK){
+			$tmp_name = $_FILES['dkAddFile']['tmp_name'][$key];
+			$name = $_FILES['dkAddFile']['name'][$key];
+			$fileName=$_FILES['dkAddFile']['name'];
+			move_uploaded_file($tmp_name, "./$name");
+		}
+	}
+}
+
+//创建镜像用的变量
+$dkFileData=trim($_POST['dkFileData']);
+$tag=trim($_POST['dkTag']);
 
 if($_GET['target'] === 'DockerContainer'){
 	echo $_GET['method'] == 'start' ?  $ctnerObj->ctnerStart($ctnerIdArr) : '';
@@ -52,13 +48,11 @@ if($_GET['target'] === 'DockerContainer'){
 }elseif ($_GET['target'] === 'DockerImage') {
 	echo $_GET['method'] == 'list' ? $imgObj->imgList($all) : '';
 	echo $_GET['method'] == 'del' ? $imgObj->imgDel($imgIdArr) : '';
-	echo $_GET['method'] == 'create' ? $imgObj->imgCreate($tag,$file) : '';
+	echo $_GET['method'] == 'create' ? $imgObj->imgCreate($tag,$dkFileData) : '';
 	echo $_GET['method'] == 'history' ? $imgObj->imgHistory($imgId) : '';
 	echo $_GET['method'] == 'inspect' ? $imgObj->imgInspect($imgId) : '';
 	echo $_GET['method'] == 'tag' ? $imgObj->imgTag($imgId,$newRepo,$newTag) : '';
 }
-
-
 
 
 

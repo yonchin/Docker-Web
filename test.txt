@@ -1,2 +1,0 @@
-FROM ubuntu
-RUN  yum -y install lsof

@@ -36,7 +36,7 @@
 				<h5 class='modal-title'>Repository</h5>
 			</div>	
 			<div class="modal-body">
-				<ul class='nav nav-tabs nav-justified'>
+				<ul class='nav nav-tabs nav-justified' id='imgTab'>
 					<li class='active'><a href='#tag' data-toggle='tab'>Tag</a></li>
 					<!-- <li><a href='#registry' data-toggle='tab'>Registry</a></li> -->
 					<li><a href='#history' data-toggle='tab'>History</a></li>
@@ -117,11 +117,11 @@
 				<h5 class="modal-title"><strong>From Dockerfile Create Images</strong></h5>
 			</div>
 			<div class="modal-body">
-				<form id='createForm' enctype="multipart/form-data">
-					<div class="form-group">
+				<form id='createForm'>
+					<!-- <div class="form-group">
 						<label for="">Build Directory Name:</label>
 						<input class='form-control'  name='dkFileDir'>
-					</div>
+					</div> -->
 					<div class="form-group">
 						<label for="">Dockerfile:</label>
 						<textarea class='form-control' rows='15' name='dkFileData'></textarea>
