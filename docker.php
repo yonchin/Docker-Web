@@ -52,6 +52,14 @@ if($_GET['target'] === 'DockerContainer'){
 	echo $_GET['method'] == 'history' ? $imgObj->imgHistory($imgId) : '';
 	echo $_GET['method'] == 'inspect' ? $imgObj->imgInspect($imgId) : '';
 	echo $_GET['method'] == 'tag' ? $imgObj->imgTag($imgId,$newRepo,$newTag) : '';
+}elseif($_GET['target'] === 'imgCrt'){
+	echo $chrtObj->imgCreatedNum();
+}elseif($_GET['target'] === 'ctnerCrt'){
+	echo $chrtObj->ctnerCreatedNum();
+}elseif($_GET['target'] === 'imgNum'){
+	echo $chrtObj->getImgNum();
+}elseif($_GET['target'] === 'ctnerNum'){
+	echo $chrtObj->getCtnerNum();
 }
 
 

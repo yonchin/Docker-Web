@@ -1,11 +1,11 @@
 		</div>
 	</div>
 </div>
-<script type="text/javascript" src='js/jquery.js'></script>
-<script type="text/javascript" src='js/bootstrap.min.js'></script>
-<script type="text/javascript" src='js/jquery.form.js'></script>
-<!-- <script type="text/javascript" src='js/jquery.validate.min.js'></script> -->
-<!-- <script type="text/javascript" src='js/messages_zh.min.js'></script> -->
-<script type="text/javascript" src='js/ajax.js'></script>
+<script src='js/jquery.js'></script>
+<script src='js/bootstrap.min.js'></script>
+<script src='js/echarts-all.js'></script>
+<script src='js/dashboard.js'></script>
+<script src='js/jquery.form.js'></script>
+<script src='js/ajax.js'></script>
 </body>
 </html>

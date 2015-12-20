@@ -25,8 +25,8 @@
 <div class="container-fluid">
 	<div class="row">
 		<div id='left' class="col-xs-4 col-sm-3 col-md-2 sidebar">
-			<ul class='nav  nav-stacked'>
-				<li><a id='dashbd' href="#">Dashboard</a></li>
+			<ul class='nav nav-pills  nav-stacked'>
+				<li class='active'><a id='dashbd' href="#">Dashboard</a></li>
 				<li><a id='image' href="#">Images</a></li>
 				<li><a id='container' href="#">Containers</a></li>
 				<li><a id='info' href="#">info</a></li>

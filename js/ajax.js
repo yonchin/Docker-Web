@@ -1,9 +1,9 @@
 $(function(){
 
 	//加载dashboard页面
-	$('#dashbd').click(function(){
-		$('.col-md-10').load('./static/dashboard.tpl');
-	});
+	// $('#dashbd').click(function(){
+	// 	$('.col-md-10').load('./static/dashboard.tpl');
+	// });
 
 	//加载images页面
 	$('#image').click(function(){
