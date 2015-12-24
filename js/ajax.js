@@ -1,10 +1,4 @@
 $(function(){
-
-	//加载dashboard页面
-	// $('#dashbd').click(function(){
-	// 	$('.col-md-10').load('./static/dashboard.tpl');
-	// });
-
 	//加载images页面
 	$('#image').click(function(){
 		$('.col-md-10').load('./static/images.tpl',function(respsonse,status,xhr){
@@ -293,7 +287,6 @@ $(function(){
 	$('#info').click(function(){
 		$('.col-md-10').load('./static/info.tpl',function(){
 			$.getJSON('docker.php?target=DockerInfo&method=getDockerInfo',function(json){
-				// alert($('#info').get(0));
 				$('#dkSysInfo').find('pre').text(JSON.stringify(json,null,"\t"));
 			});
 			$('#dkinfo').off('click','a[href="#dkVersion"]').on('click','a[href="#dkVersion"]',function(){
