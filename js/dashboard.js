@@ -69,7 +69,7 @@ $(function(){
 					],
 				}]
 			};
-			$.getJSON('docker.php?target=imgNum',function(json){
+			$.getJSON('docker.php?target=DockerChart&method=getImgNum',function(json){
 				imgNumOpt.series[0].data[0].value =json.abnormal;
 				imgNumOpt.series[0].data[1].value =json.normal;
 				imgChrt.setOption(imgNumOpt);
@@ -140,7 +140,7 @@ $(function(){
                     ],
                 }]
             };
-            $.getJSON('docker.php?target=ctnerNum',function(json){
+            $.getJSON('docker.php?target=DockerChart&method=getCtnerNum',function(json){
              ctnerNumOpt.series[0].data[0].value =json.abnormal;
              ctnerNumOpt.series[0].data[1].value =json.normal;
              ctnerChrt.setOption(ctnerNumOpt);
@@ -184,7 +184,7 @@ $(function(){
 			}]
 		};
 
-		$.getJSON('docker.php?target=imgCrt',function(json){
+		$.getJSON('docker.php?target=DockerChart&method=imgCreatedNum',function(json){
 			imgCrtOpt.xAxis[0].data =json.dtime;
 			imgCrtOpt.series[0].data =json.count;
 			imgCreated.setOption(imgCrtOpt);
@@ -231,7 +231,7 @@ $(function(){
 			}]
 		};
 
-		$.getJSON('docker.php?target=ctnerCrt',function(json){
+		$.getJSON('docker.php?target=DockerChart&method=ctnerCreatedNum',function(json){
 			ctnerCrtOpt.xAxis[0].data =json.dtime;
 			ctnerCrtOpt.series[0].data =json.count;
 			ctnerCreated.setOption(ctnerCrtOpt);

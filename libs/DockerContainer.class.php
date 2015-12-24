@@ -5,7 +5,7 @@ class DockerContainer {
 
 	public function __construct(){
 		$this->url=DOCKER_URL . '/containers/';
-		$this->cmObj=new CurlMethod();
+		$this->cmObj=CurlMethod::getInstance();
 	}
 
 	public function ctnerStart($ctnerIdArr){
@@ -44,8 +44,10 @@ class DockerContainer {
 		}			
 		return $this->cmObj->curlHttpCode();
 	}
-	public function ctnerRename($ctnerId,$newCtnerName){
-		$this->cmObj->curlPost($this->url.$ctnerId.'/rename?name='.$newCtnerName);
+	public function ctnerRename($ctnerIdArr,$newCtnerName){
+		foreach ($ctnerIdArr as $ctnerId) {
+			$this->cmObj->curlPost($this->url.$ctnerId.'/rename?name='.$newCtnerName);
+		}
 		return $this->cmObj->curlHttpCode();
 	}
 	public function ctnerDel($ctnerIdArr){
@@ -54,27 +56,31 @@ class DockerContainer {
 		}
 		return $this->cmObj->curlHttpCode();
 	}
-	public function ctnerChange($ctnerId){
-		$changes=$this->cmObj->curlGet($this->url.$ctnerId.'/changes');
-		foreach (json_decode($changes,true) as $key => $val) {
-			$arr[$key]['Path']=$val['Path'];
-			switch ($val['Kind']) {
-				case 0:
+	public function ctnerChange($ctnerIdArr){
+		foreach ($ctnerIdArr as $ctnerId) {
+			$changes=$this->cmObj->curlGet($this->url.$ctnerId.'/changes');
+			foreach (json_decode($changes,true) as $key => $val) {
+				$arr[$key]['Path']=$val['Path'];
+				switch ($val['Kind']) {
+					case 0:
 					$arr[$key]['Kind']='Modify';
 					break;
-				case 1:
+					case 1:
 					$arr[$key]['Kind']='Add';
 					break;
-				case 2:
+					case 2:
 					$arr[$key]['Kind']='Delete';
 					break;
+				}
 			}
 		}
 		return json_encode($arr);	
 	}
 
-	public function ctnerInspect($ctnerId){
-		return $this->cmObj->curlGet($this->url.$ctnerId.'/json');
+	public function ctnerInspect($ctnerIdArr){
+		foreach ($ctnerIdArr as $ctnerId) {
+			return $this->cmObj->curlGet($this->url.$ctnerId.'/json');
+		}
 	}
 
 	public function ctnerList($all){
@@ -98,12 +104,10 @@ class DockerContainer {
 		return json_encode($arr);
 	}
 
-	public function ctnerTop($ctnerId){
-		return $this->cmObj->curlGet($this->url.$ctnerId.'/top?ps_args=aux');	
+	public function ctnerTop($ctnerIdArr){
+		foreach ($ctnerIdArr as $ctnerId) {
+			return $this->cmObj->curlGet($this->url.$ctnerId.'/top?ps_args=aux');	
+		}
 	}
 
-	public function run($args){
-		method_exists($this, $_GET['method']) ? eval('$this->'.$_GET['method'].'('.$args.')') : exit('不存在此方法！');
-	}
-	
 }

@@ -5,18 +5,32 @@
 */
 class CurlMethod {
 
+
+
+
 	public $ch; //存放curl_init初始化句柄
 	public $opt=array(); //curl_setopt 选项参数
 	public $fp; //文件句柄
 	public $code=''; //存放http请求码
+	private static $cmObj;
 
-	public function __construct(){
+	private function __construct(){
 		$this->ch=curl_init();
 		$this->opt=array(
 				CURLOPT_HEADER => 0,
 				CURLOPT_RETURNTRANSFER => 1,
 			);
 	}
+
+	public static function getInstance(){
+		if(! self::$cmObj instanceof self){
+			self::$cmObj=new self();
+		}
+		return self::$cmObj;
+	}
+
+        private function __clone(){}
+
 
 	public function curlGet($url,$header=array()){
 		$opt=$this->opt + array(

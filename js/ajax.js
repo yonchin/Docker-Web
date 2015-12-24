@@ -10,10 +10,10 @@ $(function(){
 		$('.col-md-10').load('./static/images.tpl',function(respsonse,status,xhr){
 			if(status == 'success'){
 				//页面首次加载后需要显示一次数据
-				getJsonData('docker.php?target=DockerImage&method=list',{all:0},'#imgTbody');
+				getJsonData('docker.php?target=DockerImage&method=imgList',{all:0},'#imgTbody');
 
 				//全部镜像与默认相互切换
-				dsplyAlltoDefault('docker.php?target=DockerImage&method=list','#imgTbody');
+				dsplyAlltoDefault('docker.php?target=DockerImage&method=imgList','#imgTbody');
 			
 				//实现进行全选与反选
 				fullCheckedOrNot('#imgTbody');
@@ -24,14 +24,14 @@ $(function(){
 					if($('#imgTbody :checkbox').is(':checked')){
 						var imgNameId=getImgsName();	
 						// 将选定的镜像发送到服务端删除
-						$.get('docker.php?target=DockerImage&method=del', {imgId:imgNameId},function(data){
+						$.get('docker.php?target=DockerImage&method=imgDel', {imgId:imgNameId},function(data){
 							btn.button('reset').removeClass('btn-danger').addClass('btn-warning');
 							switch(data){
 								case 'ok':
 									if($.trim($('#dsplyAll').find('strong').text()) == 'Display All'){
-										getJsonData('docker.php?target=DockerImage&method=list',{all:0},'#imgTbody');
+										getJsonData('docker.php?target=DockerImage&method=imgList',{all:0},'#imgTbody');
 									}else if($.trim($('#dsplyAll').find('strong').text()) == 'Default'){
-										getJsonData('docker.php?target=DockerImage&method=list',{all:1},'#imgTbody');
+										getJsonData('docker.php?target=DockerImage&method=imgList',{all:1},'#imgTbody');
 									}
 									break;
 								default :
@@ -56,15 +56,15 @@ $(function(){
 							alert('不能为空!');
 							return false;
 						}
-						$.get('docker.php?target=DockerImage&method=tag',$('#tagForm').serialize(),function(data){
+						$.get('docker.php?target=DockerImage&method=imgTag',$('#tagForm').serialize(),function(data){
 							switch(data){
 								case 'ok':
 									if($.trim($('#dsplyAll').find('strong').text()) == 'Display All'){
-										getJsonData('docker.php?target=DockerImage&method=list',{all:0},'#imgTbody');
+										getJsonData('docker.php?target=DockerImage&method=imgList',{all:0},'#imgTbody');
 										$('#imgModal').modal('hide');	
 										$('#newTagIpt').val(null);
 									}else if($.trim($('#dsplyAll').find('strong').text()) == 'Default'){
-										getJsonData('docker.php?target=DockerImage&method=list',{all:1},'#imgTbody');
+										getJsonData('docker.php?target=DockerImage&method=imgList',{all:1},'#imgTbody');
 										$('#imgModal').modal('hide');	
 										$('#newTagIpt').val(null);
 									}
@@ -80,7 +80,7 @@ $(function(){
 					$('#imgModal').off('click','a[href="#history"]').on('click','a[href="#history"]',function(){
 						$('#hstryTbody').find('tr').hide();						
 						$('#history').find('h4').text('For [ '+imgTag+' ]');
-						$.getJSON('docker.php?target=DockerImage&method=history',{imgId:imgId},function(json){
+						$.getJSON('docker.php?target=DockerImage&method=imgHistory',{imgId:imgId},function(json){
 							var tbdy=$('#hstryTbody');
 							$.each(json,function(key,value){
 								var tr=$('<tr>');
@@ -96,7 +96,7 @@ $(function(){
 					//获取镜像的inspect
 					$('#imgModal').off('click','a[href="#inspect"]').on('click','a[href="#inspect"]',function(){
 						$('#inspect').find('h4').text('For [ '+imgTag+' ]');
-						$.getJSON('docker.php?target=DockerImage&method=inspect',{imgId:imgId},function(json){
+						$.getJSON('docker.php?target=DockerImage&method=imgInspect',{imgId:imgId},function(json){
 							$('#inspect').find('pre').text(JSON.stringify(json,null,"\t"));
 						});
 					});	
@@ -118,19 +118,18 @@ $(function(){
 				$('#imgCrtBtn').click(function() {
 					var btn=$(this).removeClass('btn-success').addClass('btn-info').button('loading');
 					$('#createForm').ajaxSubmit({
-						url:'docker.php?target=DockerImage&method=create',
+						url:'docker.php?target=DockerImage&method=imgCreate',
 						type:'POST',
 						data:$('#createForm').fieldSerialize(),
 						success:function(data){
-							alert(data)
 							switch(data){
 								case 'ok' :
 									btn.button('reset').removeClass('btn-info').addClass('btn-success');
 									if($.trim($('#dsplyAll').find('strong').text()) == 'Display All'){
-										getJsonData('docker.php?target=DockerImage&method=list',{all:0},'#imgTbody');
+										getJsonData('docker.php?target=DockerImage&method=imgList',{all:0},'#imgTbody');
 										$('#imgCrtModal').modal('hide');
 									}else if($.trim($('#dsplyAll').find('strong').text()) == 'Default'){
-										getJsonData('docker.php?target=DockerImage&method=list',{all:1},'#imgTbody');
+										getJsonData('docker.php?target=DockerImage&method=imgList',{all:1},'#imgTbody');
 										$('#imgCrtModal').modal('hide');
 									}
 									break;
@@ -151,15 +150,15 @@ $(function(){
 		$('.col-md-10').load('./static/containers.tpl',function(respsonse,status,xhr){
 			if(status == 'success'){
 				//加载默认容器列表
-				getJsonData('docker.php?target=DockerContainer&method=list',{all:0},'#ctnerTbody');
+				getJsonData('docker.php?target=DockerContainer&method=ctnerList',{all:0},'#ctnerTbody');
 				//实现容器默认列表与全部列表的相互转换
-				dsplyAlltoDefault('docker.php?target=DockerContainer&method=list','#ctnerTbody');
+				dsplyAlltoDefault('docker.php?target=DockerContainer&method=ctnerList','#ctnerTbody');
 				//实现进行全选与反选
 				fullCheckedOrNot('#ctnerTbody');
 
 				// 删除选定的容器
 				$('#delCtner').click(function(event){
-					container_cmd('docker.php?method=del',event);
+					container_cmd('docker.php?method=ctnerDel',event);
 				});
 
 				$('#ctnerTbody').on('click','a',function(){
@@ -173,18 +172,18 @@ $(function(){
 					$('#ctnerModal').off('click').on('click','#renameCtnerSbmt',function(){
 						$('#renameForm').ajaxSubmit({
 							// url:'container_cmd.php',
-							url:'docker.php?target=DockerContainer&method=rename',
+							url:'docker.php?target=DockerContainer&method=ctnerRename',
 							type:'GET',
 							data: {ctnerId:ctnerId},
 							success:function(data){
 								switch(data){
 									case 'ok':
 										if($.trim($('#dsplyAll').find('strong').text()) == 'Display All'){
-											getJsonData('docker.php?target=DockerContainer&method=list',{all:0},'#ctnerTbody');
+											getJsonData('docker.php?target=DockerContainer&method=ctnerList',{all:0},'#ctnerTbody');
 											$('#ctnerModal').modal('hide');
 											$('#newCtnerName').val(null);
 										}else if($.trim($('#dsplyAll').find('strong').text()) == 'Default'){
-											getJsonData('docker.php?target=DockerContainer&method=list',{all:1},'#ctnerTbody');
+											getJsonData('docker.php?target=DockerContainer&method=ctnerList',{all:1},'#ctnerTbody');
 											$('#ctnerModal').modal('hide');
 											$('#newCtnerName').val(null);
 										}
@@ -201,7 +200,7 @@ $(function(){
 					//获取容器的processes
 					$('#ctnerModal').off('click','a[href="#ps"]').on('click','a[href="#ps"]',function(){
 						var btn=$(this).button('loading');
-						$.getJSON('docker.php?target=DockerContainer&method=top',{ctnerId:ctnerId},function(json){
+						$.getJSON('docker.php?target=DockerContainer&method=ctnerTop',{ctnerId:ctnerId},function(json){
 							$('#psThead').find('th').remove();
 							$('#psTbody').find('tr').remove();
 							$('#ps').find('h4').text('For [ '+imgTag+' ]');
@@ -230,7 +229,7 @@ $(function(){
 					$('#ctnerModal').off('click','a[href="#changes"]').on('click','a[href="#changes"]',function(){
 						var btn=$(this).button('loading');
 						$('#changes').find('h4').text('for [ '+imgTag+' ]');
-						$.getJSON('docker.php?target=DockerContainer&method=change',{ctnerId:ctnerId},function(json){
+						$.getJSON('docker.php?target=DockerContainer&method=ctnerChange',{ctnerId:ctnerId},function(json){
 							$('#changes').find('tr').remove();
 							var chgTbdy=$('#chgTbody');
 							$.each(json,function(index,value){
@@ -251,7 +250,7 @@ $(function(){
 					$('#ctnerModal').off('click','a[href="#inspect"]').on('click','a[href="#inspect"]',function(){
 						var btn=$(this).button('loading');
 						$('#inspect').find('h4').text('For [ '+imgTag+' ]');
-						$.getJSON('docker.php?target=DockerContainer&method=inspect',{ctnerId:ctnerId},function(json){
+						$.getJSON('docker.php?target=DockerContainer&method=ctnerInspect',{ctnerId:ctnerId},function(json){
 							$('#inspect').find('pre').text(JSON.stringify(json,null,"\t"));
 							btn.button('reset');
 						});
@@ -262,29 +261,29 @@ $(function(){
 
 				//对容器的一些操作动作，如start,stop等
 				$('#ctnerPanel').on('click','#start',function(event){
-					container_cmd('docker.php?method=start',event);
+					container_cmd('docker.php?method=ctnerStart',event);
 				});
 				//对容器的一些操作动作，如start,stop等
 				$('#ctnerPanel').on('click','#stop',function(event){
-					container_cmd('docker.php?method=stop',event);
+					container_cmd('docker.php?method=ctnerStop',event);
 				});
 				//对容器的一些操作动作，如start,stop等
 				$('#ctnerPanel').on('click','#restart',function(event){
-					container_cmd('docker.php?method=restart',event);
+					container_cmd('docker.php?method=ctnerRestart',event);
 				});
 				//对容器的一些操作动作，如start,stop等
 				$('#ctnerPanel').on('click','#kill',function(event){
-					container_cmd('docker.php?method=kill',event);
+					container_cmd('docker.php?method=ctnerKill',event);
 				});
 			
 
 				//对容器的一些操作动作，如start,stop等
 				$('#ctnerPanel').on('click','#pause',function(event){
-					container_cmd('docker.php?method=pause',event);
+					container_cmd('docker.php?method=ctnerPause',event);
 				});
 				//对容器的一些操作动作，如start,stop等
 				$('#ctnerPanel').on('click','#unpause',function(event){
-					container_cmd('docker.php?method=unpause',event);
+					container_cmd('docker.php?method=ctnerUnpause',event);
 				});
 			}
 		});
@@ -292,7 +291,17 @@ $(function(){
 
 	//加载info页面
 	$('#info').click(function(){
-		$('.col-md-10').load('./static/info.tpl');
+		$('.col-md-10').load('./static/info.tpl',function(){
+			$.getJSON('docker.php?target=DockerInfo&method=getDockerInfo',function(json){
+				// alert($('#info').get(0));
+				$('#dkSysInfo').find('pre').text(JSON.stringify(json,null,"\t"));
+			});
+			$('#dkinfo').off('click','a[href="#dkVersion"]').on('click','a[href="#dkVersion"]',function(){
+				$.getJSON('docker.php?target=DockerInfo&method=getDockerVersion',function(json){
+					$('#dkVersion').find('pre').text(JSON.stringify(json,null,"\t"));
+				});
+			});
+		});
 	});
 
 	//获取json数据并将其放入表格
@@ -385,14 +394,14 @@ $(function(){
 				switch(data){
 					case 'ok':
 						if($.trim($('#dsplyAll').find('strong').text()) == 'Display All'){
-							getJsonData('docker.php?target=DockerContainer&method=list',{all:0},'#ctnerTbody').done(function(data,textStatus,xhr){
+							getJsonData('docker.php?target=DockerContainer&method=ctnerList',{all:0},'#ctnerTbody').done(function(data,textStatus,xhr){
 								if(xhr.status == '200'){
 									btn.button('reset');
 									$('#full').prop('checked', false);
 								}
 							});
 						}else if($.trim($('#dsplyAll').find('strong').text()) == 'Default'){
-							getJsonData('docker.php?target=DockerContainer&method=list',{all:1},'#ctnerTbody').done(function(){
+							getJsonData('docker.php?target=DockerContainer&method=ctnerList',{all:1},'#ctnerTbody').done(function(){
 								if(xhr.status == '200'){
 									btn.button('reset');
 									$('#full').prop('checked', false);

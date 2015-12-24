@@ -8,7 +8,7 @@ class DockerChart {
 	private $ctnerNum;
 	public function __construct(){
 		$this->url=DOCKER_URL;
-		$this->cmObj=new  CurlMethod();
+		$this->cmObj=CurlMethod::getInstance();
 	}
 
 	public function imgCreatedNum(){

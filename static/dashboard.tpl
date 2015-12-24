@@ -3,7 +3,7 @@
 			<div class="col-xs-12 col-md-6">
 				<div class="panel panel-info">
 					<div class="panel-heading">
-						<div id='imgChrt'  style='height: 260px;'>
+						<div id='imgChrt'  style='height: 250px;'>
 						</div>
 					</div>
 				</div>
@@ -11,7 +11,7 @@
 			<div class="col-xs-12 col-sm-6">
 				<div class="panel panel-danger">
 					<div class="panel-heading">
-						<div id='ctnerChrt'  style='height: 260px;'>
+						<div id='ctnerChrt'  style='height: 250px;'>
 						</div>
 					</div>
 				</div>
@@ -21,7 +21,7 @@
 			<div class="col-sm-6">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<div id='imgCreated'  style='height: 260px;'>
+						<div id='imgCreated'  style='height: 250px;'>
 						</div>
 					</div>
 				</div>
