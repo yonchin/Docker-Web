@@ -4,10 +4,6 @@
 * curl for POST GET DELETE
 */
 class CurlMethod {
-
-
-
-
 	public $ch; //存放curl_init初始化句柄
 	public $opt=array(); //curl_setopt 选项参数
 	public $fp; //文件句柄
